@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { FavoritesContext } from '../context/FavoritesContext';
 
 export default function MovieCard({ movie }) {
@@ -6,17 +7,16 @@ export default function MovieCard({ movie }) {
     useContext(FavoritesContext);
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
-  function onFavoriteClick() {
-    if (isFavorite) {
-      removeFromFavorites(movie.id);
-    } else {
-      addToFavorites(movie);
-    }
-  }
+  const onFavoriteClick = (e) => {
+    e.stopPropagation(); 
+    isFavorite ? removeFromFavorites(movie.id) : addToFavorites(movie);
+  };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
-      <div className="relative">
+    <div className="w-full max-w-sm mx-auto bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+      {/* Контейнер для постера */}
+      <div className="relative w-full aspect-[3/4]">
+    
         <img
           src={
             movie.poster_path
@@ -24,27 +24,26 @@ export default function MovieCard({ movie }) {
               : 'https://via.placeholder.com/150'
           }
           alt={movie.title}
-          className="w-full h-64 object-cover rounded-xl mb-4"
+          className="w-full h-full object-cover"
         />
-        <div className="absolute bottom-2 right-2">
-          <button
-            onClick={onFavoriteClick}
-            className={`bg-white/80 dark:bg-gray-800/80 backdrop-blur-md rounded-full p-2 ${
-              isFavorite
-                ? 'text-red-600 dark:text-red-400'
-                : 'text-gray-400 dark:text-gray-500'
-            } hover:text-red-600 dark:hover:text-red-400 transition-colors duration-200`}
-          >
-            {isFavorite ? '❤️' : '🖤'}
-          </button>
-        </div>
+        {/* Кнопка "избранное" */}
+        <button
+          onClick={onFavoriteClick}
+          aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+          className="absolute top-2 right-2 bg-white/80 dark:bg-gray-800/80 rounded-full p-2 text-xl"
+        >
+          {isFavorite ? (
+            <FaHeart className="text-red-600 dark:text-red-400" />
+          ) : (
+            <FaRegHeart className="text-gray-400 dark:text-gray-500" />
+          )}
+        </button>
       </div>
-      <div className="text-center">
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          {movie.title}
-        </h3>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
-          {movie.release_date?.split('-')[0] || 'N/A'}
+      {/* Контейнер для текста */}
+      <div className="p-4">
+        <h3 className="text-xl font-bold text-white truncate">{movie.title}</h3>
+        <p className="text-gray-300">
+          {movie.release_date ? movie.release_date.split('-')[0] : 'N/A'}
         </p>
       </div>
     </div>
