@@ -1,5 +1,4 @@
-const API_KEY =
-  import.meta.env.VITE_TMDB_API_KEY || '5e31129e62ecb3cf2ffdca2f6a602871';
+const API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const BASE_URL = 'https://api.themoviedb.org/3';
 
 export const getPopularMovies = async () => {
@@ -41,5 +40,20 @@ export const searchMovies = async (query) => {
     }));
   } catch (error) {
     throw new Error('Error searching movies: ' + error.message);
+  }
+};
+
+export const getTopRatedMovies = async () => {
+  try {
+    const response = await fetch(
+      `${BASE_URL}/movie/top_rated?api_key=${API_KEY}`
+    );
+    if (!response.ok) {
+      throw new Error('Failed to fetch top ratede movies');
+    }
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    throw new Error(error.message);
   }
 };

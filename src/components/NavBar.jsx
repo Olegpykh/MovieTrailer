@@ -14,6 +14,20 @@ export default function NavBar() {
               Home
             </Link>
             <Link
+              to="/upcoming"
+              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+             Upcoming
+            </Link>
+
+            <Link
+              to="/topratedmovies"
+              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              Top Rated
+            </Link>
+
+            <Link
               to="/favorites"
               className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
             >

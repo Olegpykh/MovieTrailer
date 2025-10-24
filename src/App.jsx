@@ -2,6 +2,9 @@ import './App.css';
 import NavBar from './components/NavBar.jsx';
 import Favorites from './pages/Favorites.jsx';
 import Home from './pages/Home.jsx';
+import TopRatedMovies from './pages/TopRatedMovies.jsx';
+import Upcoming from './pages/Upcoming.jsx';
+
 import { Routes, Route } from 'react-router-dom';
 import { FavoritesProvider } from './context/FavoritesContext.jsx';
 
@@ -12,7 +15,9 @@ function App() {
       <main className="pt-16">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/upcoming" element={<Upcoming />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/topratedmovies" element={<TopRatedMovies />} />
         </Routes>
       </main>
     </FavoritesProvider>

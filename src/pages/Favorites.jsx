@@ -4,6 +4,7 @@ import MovieCard from '../components/MovieCard';
 
 export default function Favorites() {
   const { favorites } = useContext(FavoritesContext);
+  
 
   console.log('Favorites state:', favorites); // Для отладки
 
