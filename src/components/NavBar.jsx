@@ -17,7 +17,7 @@ export default function NavBar() {
               to="/upcoming"
               className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
             >
-             Upcoming
+              Upcoming
             </Link>
 
             <Link
@@ -25,6 +25,12 @@ export default function NavBar() {
               className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
             >
               Top Rated
+            </Link>
+            <Link
+              to="/tvshows"
+              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+            >
+              TV Shows
             </Link>
 
             <Link

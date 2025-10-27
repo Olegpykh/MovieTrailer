@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { FavoritesContext } from '../context/FavoritesContext';
 import MovieCard from '../components/MovieCard';
 
+
 export default function Favorites() {
   const { favorites } = useContext(FavoritesContext);
   

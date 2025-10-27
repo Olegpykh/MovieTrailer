@@ -4,6 +4,7 @@ import Favorites from './pages/Favorites.jsx';
 import Home from './pages/Home.jsx';
 import TopRatedMovies from './pages/TopRatedMovies.jsx';
 import Upcoming from './pages/Upcoming.jsx';
+import TVPopular from './pages/TVPopalar.jsx';
 
 import { Routes, Route } from 'react-router-dom';
 import { FavoritesProvider } from './context/FavoritesProvider.jsx';
@@ -18,6 +19,7 @@ function App() {
           <Route path="/upcoming" element={<Upcoming />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/topratedmovies" element={<TopRatedMovies />} />
+          <Route path="/tvshows" element={<TVPopular />} />
         </Routes>
       </main>
     </FavoritesProvider>
