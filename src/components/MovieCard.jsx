@@ -16,22 +16,26 @@ export default function MovieCard({ movie }) {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  // Универсальные поля
+  const title = movie.title || movie.name || 'No name';
+  const releaseDate = movie.release_date || movie.first_air_date;
+  const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
+  const poster = movie.poster_path
+    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    : 'https://placehold.co/300x450/1a1a1a/ffffff?text=No+Image&font=roboto';
+
   return (
     <>
-      {/* Карточка — только постер + иконки */}
+      {/* Карточка */}
       <div
         onClick={openModal}
-        className="group relative w-full max-w-md mx-auto cursor-pointer overflow-hidden rounded-xl shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+        className="relative w-full max-w-md mx-auto overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:scale-105 hover:shadow-2xl"
       >
         <div className="relative aspect-[2/3] bg-gray-900">
           <img
-            src={
-              movie.poster_path
-                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                : 'https://via.placeholder.com/300x450?text=No+Image'
-            }
-            alt={movie.title}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+            src={poster}
+            alt={title}
+            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
           />
 
           {/* Сердечко */}
@@ -51,7 +55,7 @@ export default function MovieCard({ movie }) {
 
           {/* Рейтинг */}
           {movie.vote_average ? (
-            <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1 rounded-full bg-black/70 px-2 py-1 text-xs font-semibold text-white backdrop-blur-sm">
+            <div className="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white rounded-full bottom-3 left-3 bg-black/70 backdrop-blur-sm">
               <FaStar className="text-yellow-400" />
               <span>{movie.vote_average.toFixed(1)}</span>
             </div>
@@ -62,53 +66,44 @@ export default function MovieCard({ movie }) {
       {/* Модальное окно */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
           onClick={closeModal}
         >
           <div
-            className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-2xl bg-gray-900 p-6 shadow-2xl"
+            className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-2xl bg-black/90 p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Крестик */}
             <button
               onClick={closeModal}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+              className="absolute text-gray-400 transition-colors top-4 right-4 hover:text-white"
             >
-              <FaTimes className="text-2xl" />
+              <FaTimes className="text-2xl text-white rounded-full bg-black-300" />
             </button>
 
-            <div className="flex flex-col md:flex-row gap-6">
-              {/* Постер */}
+            <div className="flex flex-col gap-6 md:flex-row">
               <img
-                src={
-                  movie.poster_path
-                    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                    : 'https://via.placeholder.com/300'
-                }
-                alt={movie.title}
-                className="w-full md:w-48 h-auto rounded-lg shadow-lg"
+                src={poster}
+                alt={title}
+                className="w-full h-auto rounded-lg shadow-lg md:w-48"
               />
 
-              {/* Информация */}
               <div className="flex-1 space-y-3">
-                <h2 className="text-2xl font-bold text-white">{movie.title}</h2>
+                <h2 className="text-2xl font-bold text-white">{title}</h2>
 
                 <div className="flex items-center gap-2 text-yellow-400">
                   <FaStar />
                   <span className="font-medium">
                     {movie.vote_average?.toFixed(1) ?? 'N/A'}
                   </span>
-                  <span className="text-gray-400">
-                    • {movie.release_date?.split('-')[0] ?? 'N/A'}
-                  </span>
+                  <span className="text-gray-400">• {year}</span>
                 </div>
 
                 {movie.overview ? (
-                  <p className="text-gray-300 leading-relaxed">
+                  <p className="leading-relaxed text-gray-300">
                     {movie.overview}
                   </p>
                 ) : (
-                  <p className="text-gray-500 italic">
+                  <p className="italic text-gray-500">
                     No description available.
                   </p>
                 )}
