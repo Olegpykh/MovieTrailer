@@ -4,7 +4,7 @@ import Favorites from './pages/Favorites.jsx';
 import Home from './pages/Home.jsx';
 import TopRatedMovies from './pages/TopRatedMovies.jsx';
 import Upcoming from './pages/Upcoming.jsx';
-import TVPopular from './pages/TVPopalar.jsx';
+import TVPopular from './pages/TVPopular.jsx';
 
 import { Routes, Route } from 'react-router-dom';
 import { FavoritesProvider } from './context/FavoritesProvider.jsx';
