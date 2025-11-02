@@ -1,11 +1,16 @@
 import React, { useContext, useState } from 'react';
 import { FaHeart, FaRegHeart, FaStar, FaTimes } from 'react-icons/fa';
 import { FavoritesContext } from '../context/FavoritesContext';
+import { getMovieVideos, getTvVideos } from '../api/movie/videos';
 
 export default function MovieCard({ movie }) {
   const { favorites, addToFavorites, removeFromFavorites } =
     useContext(FavoritesContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [trailerKey, setTrailerKey] = useState(null);
+  const [trailerName, setTrailerName] = useState('');
+
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
   const onFavoriteClick = (e) => {
@@ -13,10 +18,40 @@ export default function MovieCard({ movie }) {
     isFavorite ? removeFromFavorites(movie) : addToFavorites(movie);
   };
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openModal = async () => {
+    setIsModalOpen(true);
 
-  // Универсальные поля
+    try {
+      const [movieVideos, tvVideos] = await Promise.all([
+        getMovieVideos(movie.id),
+        getTvVideos(movie.id),
+      ]);
+
+      const allVideos = [...movieVideos, ...tvVideos];
+
+      console.log('All videos:', allVideos);
+
+      const trailer = allVideos.find(
+        (v) =>
+          v.site === 'YouTube' &&
+          ['Trailer', 'Teaser', 'Clip', 'Featurette'].includes(v.type)
+      );
+
+      setTrailerKey(trailer?.key || null);
+      setTrailerName(trailer?.name || '');
+    } catch (err) {
+      console.error('❌ Ошибка при загрузке трейлера:', err);
+      setTrailerKey(null);
+      setTrailerName('');
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTrailerKey(null);
+    setTrailerName('');
+  };
+
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
@@ -66,11 +101,11 @@ export default function MovieCard({ movie }) {
       {/* Модальное окно */}
       {isModalOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
           onClick={closeModal}
         >
           <div
-            className="relative max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-2xl bg-black/90 p-6 shadow-2xl"
+            className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-2xl bg-black/90 p-8 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -80,15 +115,17 @@ export default function MovieCard({ movie }) {
               <FaTimes className="text-2xl text-white rounded-full bg-black-300" />
             </button>
 
-            <div className="flex flex-col gap-6 md:flex-row">
-              <img
-                src={poster}
-                alt={title}
-                className="w-full h-auto rounded-lg shadow-lg md:w-48"
-              />
+            <div className="flex flex-col gap-8 md:flex-row">
+              <div className="flex-shrink-0 w-full md:w-1/3">
+                <img
+                  src={poster}
+                  alt={title}
+                  className="object-cover w-full h-auto rounded-lg shadow-lg"
+                />
+              </div>
 
-              <div className="flex-1 space-y-3">
-                <h2 className="text-2xl font-bold text-white">{title}</h2>
+              <div className="flex-1 space-y-4">
+                <h2 className="text-3xl font-bold text-white">{title}</h2>
 
                 <div className="flex items-center gap-2 text-yellow-400">
                   <FaStar />
@@ -107,6 +144,30 @@ export default function MovieCard({ movie }) {
                     No description available.
                   </p>
                 )}
+
+                {/* Трейлер с помощью iframe */}
+                <div className="mt-6 w-full h-[360px] rounded-none overflow-hidden ">
+                  {trailerKey ? (
+                    <>
+                      <p className="mb-2 text-sm italic text-gray-400">
+                        {trailerName}
+                      </p>
+                      <iframe
+                        width="90%"
+                        height="90%"
+                        src={`https://www.youtube.com/embed/${trailerKey}`}
+                        title="YouTube video player"
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    </>
+                  ) : (
+                    <p className="italic text-gray-500">
+                      Trailer not available.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           </div>

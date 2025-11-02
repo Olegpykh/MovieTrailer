@@ -1,4 +1,3 @@
-// src/api/movie/search.js
 import client from '../client';
 
 const searchMovies = async (query, page = 1) => {
