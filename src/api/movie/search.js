@@ -1,6 +1,6 @@
 import client from '../client';
 
-const searchMovies = async (query, page = 1) => {
+export const searchMovies = async (query, page = 1) => {
   const response = await client.get('/search/movie', {
     params: {
       query: encodeURIComponent(query.trim()),
@@ -13,4 +13,3 @@ const searchMovies = async (query, page = 1) => {
   };
 };
 
-export default searchMovies;

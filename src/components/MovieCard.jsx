@@ -1,11 +1,15 @@
-import React, { useContext, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FaHeart, FaRegHeart, FaStar, FaTimes } from 'react-icons/fa';
-import { FavoritesContext } from '../context/FavoritesContext';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addToFavorites,
+  deleteFromFavorites,
+} from '../store/features/favorites/favoritesSlice';
 import { getMovieVideos, getTvVideos } from '../api/movie/videos';
 
 export default function MovieCard({ movie }) {
-  const { favorites, addToFavorites, removeFromFavorites } =
-    useContext(FavoritesContext);
+  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [trailerKey, setTrailerKey] = useState(null);
@@ -13,12 +17,25 @@ export default function MovieCard({ movie }) {
 
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
-  const onFavoriteClick = (e) => {
-    e.stopPropagation();
-    isFavorite ? removeFromFavorites(movie) : addToFavorites(movie);
-  };
+  const onFavoriteClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (isFavorite) {
+        dispatch(deleteFromFavorites({ id: movie.id }));
+      } else {
+        dispatch(addToFavorites(movie));
+      }
+    },
+    [dispatch, isFavorite, movie]
+  );
 
-  const openModal = async () => {
+  const closeModal = useCallback(() => {
+    setIsModalOpen(false);
+    setTrailerKey(null);
+    setTrailerName('');
+  }, []);
+
+  const openModal = useCallback(async () => {
     setIsModalOpen(true);
 
     try {
@@ -29,28 +46,18 @@ export default function MovieCard({ movie }) {
 
       const allVideos = [...movieVideos, ...tvVideos];
 
-      console.log('All videos:', allVideos);
-
       const trailer = allVideos.find(
-        (v) =>
-          v.site === 'YouTube' &&
-          ['Trailer', 'Teaser', 'Clip', 'Featurette'].includes(v.type)
+        (v) => v.site === 'YouTube' && ['Trailer'].includes(v.type)
       );
 
       setTrailerKey(trailer?.key || null);
       setTrailerName(trailer?.name || '');
     } catch (err) {
-      console.error('❌ Ошибка при загрузке трейлера:', err);
+      console.error('Failed to load trailer:', err);
       setTrailerKey(null);
       setTrailerName('');
     }
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setTrailerKey(null);
-    setTrailerName('');
-  };
+  }, [movie]);
 
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
@@ -61,7 +68,6 @@ export default function MovieCard({ movie }) {
 
   return (
     <>
-      {/* Карточка */}
       <div
         onClick={openModal}
         className="relative w-full max-w-md mx-auto overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:scale-105 hover:shadow-2xl"
@@ -73,7 +79,6 @@ export default function MovieCard({ movie }) {
             className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
           />
 
-          {/* Сердечко */}
           <button
             onClick={onFavoriteClick}
             aria-label={
@@ -88,7 +93,6 @@ export default function MovieCard({ movie }) {
             )}
           </button>
 
-          {/* Рейтинг */}
           {movie.vote_average ? (
             <div className="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white rounded-full bottom-3 left-3 bg-black/70 backdrop-blur-sm">
               <FaStar className="text-yellow-400" />
@@ -98,7 +102,6 @@ export default function MovieCard({ movie }) {
         </div>
       </div>
 
-      {/* Модальное окно */}
       {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
@@ -112,7 +115,7 @@ export default function MovieCard({ movie }) {
               onClick={closeModal}
               className="absolute text-gray-400 transition-colors top-4 right-4 hover:text-white"
             >
-              <FaTimes className="text-2xl text-white rounded-full bg-black-300" />
+              <FaTimes className="text-2xl" />
             </button>
 
             <div className="flex flex-col gap-8 md:flex-row">
@@ -145,22 +148,21 @@ export default function MovieCard({ movie }) {
                   </p>
                 )}
 
-                {/* Трейлер с помощью iframe */}
-                <div className="mt-6 w-full h-[360px] rounded-none overflow-hidden ">
+                <div className="mt-6">
                   {trailerKey ? (
                     <>
                       <p className="mb-2 text-sm italic text-gray-400">
                         {trailerName}
                       </p>
-                      <iframe
-                        width="90%"
-                        height="90%"
-                        src={`https://www.youtube.com/embed/${trailerKey}`}
-                        title="YouTube video player"
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+                      <div className="aspect-video">
+                        <iframe
+                          className="w-full h-full rounded-lg"
+                          src={`https://www.youtube.com/embed/${trailerKey}`}
+                          title="Trailer"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
                     </>
                   ) : (
                     <p className="italic text-gray-500">

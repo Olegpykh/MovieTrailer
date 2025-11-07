@@ -1,13 +1,12 @@
 import client from '../client';
 
-const getTopRatedMovies = async (page = 1) => {
+export const getTopRatedMovies = async (page = 1) => {
   const response = await client.get('/movie/top_rated', {
     params: { page },
   });
   return {
     results: response.data.results,
-    totalPages: response.data.total_pages,
+    totalPages: response.data.total_pages || 1,
   };
 };
 
-export default getTopRatedMovies;
