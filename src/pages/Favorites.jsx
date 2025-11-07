@@ -1,31 +1,58 @@
-import React, { useContext } from 'react';
-import { FavoritesContext } from '../context/FavoritesContext';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import MovieCard from '../components/MovieCard';
-
+import HeroBanner from '../components/HeroBanner';
 
 export default function Favorites() {
-  const { favorites } = useContext(FavoritesContext);
-  
+  const favorites = useSelector((state) => {
+    const favs = state.favorites;
+    return Array.isArray(favs) ? favs.filter((movie) => movie && movie.id) : [];
+  });
 
+  const featuredFavorites = favorites
+    .filter((movie) => movie.backdrop_path)
+    .slice(0, 5);
+
+  const hasMovies = favorites.length > 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pt-20">
-      <h1 className="text-4xl sm:text-5xl font-semibold text-center text-gray-900 dark:text-white mb-10 tracking-tight">
-        Your Favorite Movies
-      </h1>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {favorites === undefined || favorites.length === 0 ? (
-          <p className="text-center text-lg text-gray-500 dark:text-gray-400">
-            No favorite movies yet. Add some from the Home page!
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {favorites.map((movie) => (
-              <MovieCard key={movie.id} movie={movie} />
-            ))}
-          </div>
-        )}
+    <>
+      {featuredFavorites.length > 0 && <HeroBanner items={featuredFavorites} />}
+
+      <div
+        className={`pt-10 transition-colors duration-300 ${
+          featuredFavorites.length > 0
+            ? 'bg-white/50'
+            : 'bg-gray-50 dark:bg-gray-900'
+        }`}
+      >
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <h1 className="mb-12 text-4xl font-semibold tracking-tight text-center text-gray-900 sm:text-5xl dark:text-white">
+            Your Favorite Movies
+          </h1>
+
+          {!hasMovies ? (
+            <div className="py-20 text-center">
+              <div className="w-32 h-32 mx-auto mb-8 bg-gray-200 border-2 border-dashed rounded-xl dark:bg-gray-700" />
+              <p className="mb-6 text-lg text-gray-500 dark:text-gray-400">
+                No favorite movies yet. Start adding from the Home page!
+              </p>
+              <a
+                href="/"
+                className="inline-block px-8 py-3.5 text-lg font-medium text-white transition-all bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-105 shadow-lg"
+              >
+                Go to Home
+              </a>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+              {favorites.map((movie) => (
+                <MovieCard key={movie.id} movie={movie} />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

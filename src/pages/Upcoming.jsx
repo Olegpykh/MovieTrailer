@@ -1,82 +1,128 @@
-// src/pages/TVPopular.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import MovieCard from '../components/MovieCard';
-import getPopularTVShows from '../api/movie/tv';
+import HeroBanner from '../components/HeroBanner';
+import { getUpcomingMovies } from '../api';
+import {
+  setMovies,
+  setFeaturedMovies,
+  setLoading,
+  setError,
+  resetPage,
+  loadMore,
+} from '../store/features/movies/movieSlice';
 
-export default function TVPopular() {
-  const [shows, setShows] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function Upcoming() {
+  const dispatch = useDispatch();
 
-  const fetchShows = async (pageNumber) => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  const { movies, featuredMovies, page, totalPages, isLoading, error } =
+    useSelector((state) => state.movies);
 
-      const { results, totalPages } = await getPopularTVShows(pageNumber);
-      setShows((prev) => [...prev, ...results]);
-      setTotalPages(totalPages);
-    } catch (err) {
-      const message =
-        err.response?.data?.status_message ||
-        err.message ||
-        'Failed to load popular TV shows.';
-      setError(message);
-    } finally {
-      setIsLoading(false);
-    }
+  const fetchUpcoming = useCallback(
+    async (pageNum) => {
+      if (pageNum > 1) {
+        dispatch(setLoading(true));
+        dispatch(setError(null));
+      }
+
+      try {
+        const { results, totalPages: apiTotalPages } = await getUpcomingMovies(
+          pageNum
+        );
+
+        if (pageNum === 1) {
+          const top5 = results.filter((m) => m.backdrop_path).slice(0, 5);
+          dispatch(setFeaturedMovies(top5));
+        }
+
+        dispatch(
+          setMovies({
+            results,
+
+            totalPages: apiTotalPages,
+            page: pageNum,
+          })
+        );
+      } catch (err) {
+        dispatch(setError(err.message || 'Failed to load upcoming movies.'));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    },
+    [dispatch]
+  );
+
+  const handleLoadMore = () => {
+    dispatch(loadMore());
   };
 
   useEffect(() => {
-    fetchShows(page);
-  }, [page]);
+    dispatch(resetPage());
 
-  const handleLoadMore = () => {
-    if (page < totalPages) {
-      setPage((prev) => prev + 1);
+    fetchUpcoming(1);
+  }, [dispatch, fetchUpcoming]);
+
+  useEffect(() => {
+    if (page > 1) {
+      fetchUpcoming(page);
     }
-  };
+  }, [page, fetchUpcoming]);
 
   return (
-    <div className="min-h-screen pt-20 transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
-      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <h1 className="mb-12 text-4xl font-semibold tracking-tight text-center text-gray-900 sm:text-5xl dark:text-white">
-          Popular TV Shows
-        </h1>
+    <>
+      {featuredMovies.length > 0 && <HeroBanner items={featuredMovies} />}
 
-        {error ? (
-          <p className="py-10 text-lg text-center text-red-500 dark:text-red-400">
-            {error}
-          </p>
-        ) : shows.length === 0 && !isLoading ? (
-          <p className="py-10 text-lg text-center text-gray-500 dark:text-gray-400">
-            No popular TV shows found.
-          </p>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-              {shows.map((show) => (
-                <MovieCard key={show.id} movie={show} />
-              ))}
-            </div>
+      <div
+        className={`pt-10 transition-colors duration-300 ${
+          featuredMovies.length > 0
+            ? 'bg-white/50'
+            : 'bg-gray-50 dark:bg-gray-900'
+        }`}
+      >
+        <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <h1 className="mb-12 text-4xl font-semibold tracking-tight text-center text-gray-900 sm:text-5xl dark:text-white">
+            Upcoming Movies
+          </h1>
 
-            {/* Кнопка "Load more" */}
-            {page < totalPages && (
-              <div className="flex justify-center mt-10">
-                <button
-                  onClick={handleLoadMore}
-                  disabled={isLoading}
-                  className="px-6 py-3 text-white transition-colors bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isLoading ? 'Loading...' : 'Load more'}
-                </button>
-              </div>
-            )}
-          </>
-        )}
+          {error ? (
+            <p className="py-10 text-lg text-center text-red-500 dark:text-red-400">
+              {error}
+            </p>
+          ) : (
+            <>
+              {isLoading && movies.length === 0 ? (
+                <p className="py-10 text-lg text-center text-gray-500 dark:text-gray-400">
+                  Loading...
+                </p>
+              ) : movies.length === 0 ? (
+                <p className="py-10 text-lg text-center text-gray-500 dark:text-gray-400">
+                  No upcoming movies found.
+                </p>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+                    {movies.map((movie, index) => (
+                      <MovieCard key={`${movie.id}-${index}`} movie={movie} />
+                    ))}
+                  </div>
+
+                  {page < totalPages && (
+                    <div className="flex justify-center mt-10">
+                      <button
+                        onClick={handleLoadMore}
+                        disabled={isLoading}
+                        className="px-8 py-4 mb-12 text-xl text-white bg-blue-600 rounded-full transxlition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isLoading ? 'Loading...' : 'Load more'}
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

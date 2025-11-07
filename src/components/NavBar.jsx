@@ -3,39 +3,37 @@ import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   return (
-    <nav className="fixed top-0 left-0 w-full bg-white/80 dark:bg-black/80 backdrop-blur-md shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <nav className="fixed top-0 left-0 z-50 w-full shadow-sm bg-white/90 dark:bg-black/80 backdrop-blur-md">
+      <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
           <div className="flex space-x-8">
             <Link
               to="/"
-              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+              className="text-xl font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
             >
               Home
             </Link>
             <Link
               to="/upcoming"
-              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+              className="text-xl font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
             >
               Upcoming
             </Link>
-
             <Link
               to="/topratedmovies"
-              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+              className="text-xl font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
             >
               Top Rated
             </Link>
             <Link
               to="/tvshows"
-              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+              className="text-xl font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
             >
               TV Shows
             </Link>
-
             <Link
               to="/favorites"
-              className="text-gray-900 dark:text-gray-100 text-lg font-medium hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+              className="text-xl font-semibold text-gray-900 transition-colors duration-200 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400"
             >
               Favorites
             </Link>
