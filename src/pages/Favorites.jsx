@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import MovieCard from '../components/MovieCard';
 import HeroBanner from '../components/HeroBanner';
 
+
 export default function Favorites() {
   const favorites = useSelector((state) => {
     const favs = state.favorites;

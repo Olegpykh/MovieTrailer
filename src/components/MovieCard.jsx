@@ -1,11 +1,13 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FaHeart, FaRegHeart, FaStar, FaTimes } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToFavorites,
   deleteFromFavorites,
 } from '../store/features/favorites/favoritesSlice';
-import { getMovieVideos, getTvVideos } from '../api/movie/videos';
+import { getMovieVideos, getTvVideos } from '../api/index';
+import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
+import Modal from './Modal';
 
 export default function MovieCard({ movie }) {
   const dispatch = useDispatch();
@@ -14,6 +16,8 @@ export default function MovieCard({ movie }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [trailerKey, setTrailerKey] = useState(null);
   const [trailerName, setTrailerName] = useState('');
+  const [castTV, setCastTV] = useState({});
+  const [castMovie, setCastMovie] = useState({});
 
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
@@ -59,6 +63,14 @@ export default function MovieCard({ movie }) {
     }
   }, [movie]);
 
+  useEffect((id) => {
+    const castCredits = getCreditsFromTV(id);
+    return setCastTV(castCredits);
+  },[]);
+
+  console.log(castTV)
+
+  
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
@@ -76,7 +88,7 @@ export default function MovieCard({ movie }) {
           <img
             src={poster}
             alt={title}
-            className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110"
+            className="object-cover w-full h-full transition-transform duration-900 group-hover:scale-110"
           />
 
           <button
@@ -103,6 +115,17 @@ export default function MovieCard({ movie }) {
       </div>
 
       {isModalOpen && (
+        <Modal
+          movie={movie}
+          year={year}
+          closeModal={closeModal}
+          poster={poster}
+          title={title}
+          trailerKey={trailerKey}
+          trailerName={trailerName}
+        />
+      )}
+      {/* {isModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
           onClick={closeModal}
@@ -174,7 +197,7 @@ export default function MovieCard({ movie }) {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

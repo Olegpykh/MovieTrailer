@@ -11,6 +11,7 @@ import {
   loadMore,
   resetPage,
 } from '../store/features/movies/movieSlice';
+import ButtonPage from '../components/ButtonPage';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -102,13 +103,14 @@ export default function Home() {
 
                   {page < totalPages && (
                     <div className="flex justify-center mt-12 -mb-6">
-                      <button
+                      <ButtonPage isLoading={isLoading} handleLoadMore={handleLoadMore} />
+                      {/* <button
                         onClick={handleLoadMore}
                         disabled={isLoading}
-                        className="px-8 py-4 mb-12 text-xl text-white bg-blue-600 rounded-full transxlition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-20 py-4 mb-12 text-xl text-white bg-yellow-500 rounded-full transxlition-colors hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         {isLoading ? 'Loading...' : 'Load More'}
-                      </button>
+                      </button> */}
                     </div>
                   )}
                 </>
