@@ -11,6 +11,7 @@ import {
   resetPage,
   loadMore,
 } from '../store/features/movies/movieSlice';
+import ButtonPage from '../components/ButtonPage';
 
 export default function TVPopular() {
   const dispatch = useDispatch();
@@ -111,13 +112,10 @@ export default function TVPopular() {
 
                   {page < totalPages && (
                     <div className="flex justify-center mt-10">
-                      <button
-                        onClick={handleLoadMore}
-                        disabled={isLoading}
-                        className="px-8 py-4 mb-12 text-xl text-white bg-blue-600 rounded-full transxlition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isLoading ? 'Loading...' : 'Load more'}
-                      </button>
+                      <ButtonPage
+                        isLoading={isLoading}
+                        handleLoadMore={handleLoadMore}
+                      />
                     </div>
                   )}
                 </>
