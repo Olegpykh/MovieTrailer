@@ -110,13 +110,6 @@ export default function TopRatedMovies() {
                         isLoading={isLoading}
                         handleLoadMore={handleLoadMore}
                       />
-                      {/* <button
-                        onClick={handleLoadMore}
-                        disabled={isLoading}
-                        className="px-8 py-4 mb-12 text-xl text-white bg-blue-600 rounded-full transxlition-colors hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        {isLoading ? 'Loading...' : 'Load more'}
-                      </button> */}
                     </div>
                   )}
                 </>

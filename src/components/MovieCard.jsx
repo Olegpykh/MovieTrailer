@@ -16,8 +16,8 @@ export default function MovieCard({ movie }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [trailerKey, setTrailerKey] = useState(null);
   const [trailerName, setTrailerName] = useState('');
-  const [castTV, setCastTV] = useState({});
-  const [castMovie, setCastMovie] = useState({});
+  const [castTV, setCastTV] = useState([]);
+  const [castMovie, setCastMovie] = useState([]);
 
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
@@ -63,14 +63,29 @@ export default function MovieCard({ movie }) {
     }
   }, [movie]);
 
-  useEffect((id) => {
-    const castCredits = getCreditsFromTV(id);
-    return setCastTV(castCredits);
-  },[]);
+  useEffect(() => {
+    const fetchTvCredits = async () => {
+      const data = await getCreditsFromTV(movie.id);
+      console.log(data);
 
-  console.log(castTV)
+      setCastTV(data);
+    };
+    fetchTvCredits();
+  }, [movie.id]);
 
-  
+  useEffect(() => {
+    const fetchMovieCredits = async () => {
+      const data = await getCreditsFromMovie(movie.id);
+      console.log(data);
+
+      setCastMovie(data);
+    };
+    fetchMovieCredits();
+  }, [movie.id]);
+
+  const allCredits = [...castTV, ...castMovie];
+  console.log(allCredits);
+
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
@@ -123,81 +138,9 @@ export default function MovieCard({ movie }) {
           title={title}
           trailerKey={trailerKey}
           trailerName={trailerName}
+          allCredits={allCredits}
         />
       )}
-      {/* {isModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
-          onClick={closeModal}
-        >
-          <div
-            className="relative w-full max-w-6xl max-h-[95vh] overflow-y-auto rounded-2xl bg-black/90 p-8 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={closeModal}
-              className="absolute text-gray-400 transition-colors top-4 right-4 hover:text-white"
-            >
-              <FaTimes className="text-2xl" />
-            </button>
-
-            <div className="flex flex-col gap-8 md:flex-row">
-              <div className="flex-shrink-0 w-full md:w-1/3">
-                <img
-                  src={poster}
-                  alt={title}
-                  className="object-cover w-full h-auto rounded-lg shadow-lg"
-                />
-              </div>
-
-              <div className="flex-1 space-y-4">
-                <h2 className="text-3xl font-bold text-white">{title}</h2>
-
-                <div className="flex items-center gap-2 text-yellow-400">
-                  <FaStar />
-                  <span className="font-medium">
-                    {movie.vote_average?.toFixed(1) ?? 'N/A'}
-                  </span>
-                  <span className="text-gray-400">• {year}</span>
-                </div>
-
-                {movie.overview ? (
-                  <p className="leading-relaxed text-gray-300">
-                    {movie.overview}
-                  </p>
-                ) : (
-                  <p className="italic text-gray-500">
-                    No description available.
-                  </p>
-                )}
-
-                <div className="mt-6">
-                  {trailerKey ? (
-                    <>
-                      <p className="mb-2 text-sm italic text-gray-400">
-                        {trailerName}
-                      </p>
-                      <div className="aspect-video">
-                        <iframe
-                          className="w-full h-full rounded-lg"
-                          src={`https://www.youtube.com/embed/${trailerKey}`}
-                          title="Trailer"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                        ></iframe>
-                      </div>
-                    </>
-                  ) : (
-                    <p className="italic text-gray-500">
-                      Trailer not available.
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )} */}
     </>
   );
 }
