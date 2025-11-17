@@ -12,9 +12,15 @@ import {
   resetPage,
 } from '../store/features/movies/movieSlice';
 import ButtonPage from '../components/ButtonPage';
+import store from '../store/store'
+
+
+console.log(store.getState());
+
 
 export default function Home() {
   const dispatch = useDispatch();
+
 
   const { movies, featuredMovies, page, totalPages, isLoading, error } =
     useSelector((state) => state.movies);

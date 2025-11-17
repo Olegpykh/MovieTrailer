@@ -14,3 +14,5 @@ const fetchPerson = async (id, details = '') => {
 export const getPersonCombinedCredits = (id) =>
   fetchPerson(id, 'combined_credits');
 export const getPerson = (id) => fetchPerson(id);
+
+

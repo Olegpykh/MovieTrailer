@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FaHeart, FaRegHeart, FaStar, FaTimes } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToFavorites,
@@ -10,6 +10,8 @@ import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
 import Modal from './Modal';
 
 export default function MovieCard({ movie }) {
+
+  
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
 
@@ -66,7 +68,7 @@ export default function MovieCard({ movie }) {
   useEffect(() => {
     const fetchTvCredits = async () => {
       const data = await getCreditsFromTV(movie.id);
-      console.log(data);
+
 
       setCastTV(data);
     };
@@ -76,7 +78,7 @@ export default function MovieCard({ movie }) {
   useEffect(() => {
     const fetchMovieCredits = async () => {
       const data = await getCreditsFromMovie(movie.id);
-      console.log(data);
+    
 
       setCastMovie(data);
     };
@@ -84,26 +86,26 @@ export default function MovieCard({ movie }) {
   }, [movie.id]);
 
   const allCredits = [...castTV, ...castMovie];
-  console.log(allCredits);
+ 
 
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
   const poster = movie.poster_path
-    ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
     : 'https://placehold.co/300x450/1a1a1a/ffffff?text=No+Image&font=roboto';
 
   return (
     <>
       <div
         onClick={openModal}
-        className="relative w-full max-w-md mx-auto overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:scale-105 hover:shadow-2xl"
+        className="relative w-full max-w-md mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:scale-105 hover:shadow-2xl"
       >
-        <div className="relative aspect-[2/3] bg-gray-900">
+        <div className="relative bg-gray-900">
           <img
             src={poster}
             alt={title}
-            className="object-cover w-full h-full transition-transform duration-900 group-hover:scale-110"
+            className="object-contain w-full h-auto transition-transform duration-900 group-hover:scale-110"
           />
 
           <button
@@ -144,3 +146,6 @@ export default function MovieCard({ movie }) {
     </>
   );
 }
+
+
+

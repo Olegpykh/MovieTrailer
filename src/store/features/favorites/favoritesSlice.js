@@ -2,11 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const loadFavoritesFromStorage = () => {
   try {
-    const saved = localStorage.getItem('favorites');
-    const parsed = saved ? JSON.parse(saved) : [];
-    return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
-  } catch (err) {
-    console.error('Failed to load favorites from localStorage', err);
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
+  } catch {
     return [];
   }
 };
@@ -36,3 +33,5 @@ const favoritesSlice = createSlice({
 export const { addToFavorites, deleteFromFavorites } = favoritesSlice.actions;
 
 export default favoritesSlice.reducer;
+
+
