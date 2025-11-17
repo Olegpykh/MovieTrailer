@@ -13,4 +13,5 @@ export {
   getCreditsFromTV,
 } from './creditsAndVideos/creditsAndVideos';
 export { getPerson, getPersonCombinedCredits } from './person/person';
+export {getTvDetails,getMovieDetails} from "./movieDetails/movieDetails"
 

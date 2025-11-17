@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPerson, getPersonCombinedCredits } from '../api/person/person';
+import { getPerson, getPersonCombinedCredits} from "../api/index"
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';
 
 export default function PersonPage() {
   const { id } = useParams();
   const [person, setPerson] = useState({});
-  const [credits, setCredits] = useState({ cast: [], crew: [] });
+  const [credits, setCredits] = useState({ cast: []});
   const [loading, setLoading] = useState(true);
   const [bioExpanded, setBioExpanded] = useState(false);
+console.log(id);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +32,10 @@ export default function PersonPage() {
       </div>
     );
   }
-
+     console.log(person);
+     console.log(credits);
+     
+     
   const knownFor = credits.cast
     .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
     .slice(0, 12);
@@ -41,7 +45,7 @@ export default function PersonPage() {
 
   return (
     <div className="min-h-screen text-white bg-neutral-950">
-      <div className="px-6 py-12 mx-auto max-w-7xl">
+      <div className="px-6 pt-32 mx-auto max-w-7xl">
         <div className="flex flex-col gap-12 md:flex-row">
           <div className="flex-shrink-0">
             {person.profile_path ? (

@@ -11,6 +11,11 @@ const store = configureStore({
 
 let prevFavorites = store.getState().favorites;
 
+
+
+
+
+
 store.subscribe(() => {
   const favorites = store.getState().favorites;
   if (favorites !== prevFavorites) {

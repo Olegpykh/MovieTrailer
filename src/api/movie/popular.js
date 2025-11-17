@@ -9,4 +9,3 @@ export const getPopularMovies = async (page = 1) => {
     totalPages: response.data.total_pages || 1,
   };
 };
-
