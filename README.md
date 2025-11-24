@@ -1,15 +1,16 @@
 # MovieDB – Modern Movie & TV Show Explorer
-https://movie-trailer-eight-indol.vercel.app/
-<<div align="center">
+[Live Demo](https://movie-trailer-eight-indol.vercel.app/)
 
-  <img width="49%" src="https://github.com/user-attachments/assets/657c6602-a055-4c85-a979-b1b638954ec5" alt="Home Page" />
-  <img width="49%" src="https://github.com/user-attachments/assets/6ce70713-384c-4bfc-b137-ab8835aebe21" alt="Movie Details" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/51b0c327-4121-4c13-90cc-23797e50022a" width="400"/>
+  <img src="https://github.com/user-attachments/assets/9beb55de-be03-4137-86e3-7c5256d8a2f2" width="400"/>
+  <img src="https://github.com/user-attachments/assets/c3d580b1-0266-41b0-ba6d-581b7101365b" width="400"/>
+</div>
 
-  <br><br>
-
-  <img width="49%" src="https://github.com/user-attachments/assets/329df7d6-455b-4dd3-8b61-2bbbcec337ff" alt="YouTube Trailer Modal" />
-  <img width="49%" src="https://github.com/user-attachments/assets/dba813b6-c8b1-4b4e-ac16-0731c7eb0760" alt="Mobile Responsive" />
-
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e009c14d-17cb-455a-b782-c1b4dfad07fd" width="400"/>
+  <img src="https://github.com/user-attachments/assets/07857c09-510c-41e7-bd60-962fd02a8f0b" width="400"/>
+  <img src="https://github.com/user-attachments/assets/b1e5554e-fc6b-4648-951e-e25ed71c4876" width="400"/>
 </div>
 > A fast, responsive movie & TV show explorer featuring a universal details page, official YouTube trailer modal, and cinematic design — built with clean, modern React.
 
