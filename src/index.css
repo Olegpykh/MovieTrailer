@@ -8,7 +8,7 @@ html, body, #root {
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow-x: hidden;
+
 }
 
 html {
@@ -16,6 +16,3 @@ html {
 }
 
 
-.max-w-7xl {
-  max-width: 1280px;
-}

@@ -1,9 +1,9 @@
 import client from '../client';
 
 export const searchMovies = async (query, page = 1) => {
-  const response = await client.get('/search/movie', {
+  const response = await client.get('/search/multi', {
     params: {
-      query: encodeURIComponent(query.trim()),
+      query: query.trim(),
       page,
     },
   });
@@ -12,4 +12,3 @@ export const searchMovies = async (query, page = 1) => {
     totalPages: response.data.total_pages || 1,
   };
 };
-

@@ -177,7 +177,7 @@ export default function MediaDetails() {
                     <div className="flex items-center gap-2">
                       <FaStar className="text-yellow-400" />
                       <span className="text-lg font-semibold">
-                        {media.vote_average?.toFixed(1)} / 10
+                        {media.vote_average?.toFixed(1)}
                       </span>
                     </div>
                   </div>
