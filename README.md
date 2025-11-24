@@ -1,4 +1,4 @@
-# MovieDB – Modern Movie & TV Show Explorer
+# StreamVerse Trailers – Modern Movie & TV Show Explorer
 [Live Demo](https://movie-trailer-eight-indol.vercel.app/)
 
 <div align="center">
