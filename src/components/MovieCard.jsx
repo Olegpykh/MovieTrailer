@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { FaHeart, FaRegHeart, FaStar, FaPlay } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   addToFavorites,
@@ -10,8 +10,6 @@ import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
 import Modal from './Modal';
 
 export default function MovieCard({ movie }) {
-
-  
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
 
@@ -68,8 +66,6 @@ export default function MovieCard({ movie }) {
   useEffect(() => {
     const fetchTvCredits = async () => {
       const data = await getCreditsFromTV(movie.id);
-
-
       setCastTV(data);
     };
     fetchTvCredits();
@@ -78,15 +74,12 @@ export default function MovieCard({ movie }) {
   useEffect(() => {
     const fetchMovieCredits = async () => {
       const data = await getCreditsFromMovie(movie.id);
-    
-
       setCastMovie(data);
     };
     fetchMovieCredits();
   }, [movie.id]);
 
   const allCredits = [...castTV, ...castMovie];
- 
 
   const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
@@ -99,14 +92,20 @@ export default function MovieCard({ movie }) {
     <>
       <div
         onClick={openModal}
-        className="relative w-full max-w-md mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:scale-105 hover:shadow-2xl"
+        className="relative w-full max-w-3xl mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:shadow-2xl"
       >
         <div className="relative bg-gray-900">
           <img
             src={poster}
             alt={title}
-            className="object-contain w-full h-auto transition-transform duration-900 group-hover:scale-110"
+            className="object-contain w-full h-auto transition-transform duration-900 "
           />
+
+          <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 bg-black/40 group-hover:opacity-100">
+            <div className="flex items-center justify-center w-16 h-16 transition-transform duration-300 transform scale-0 rounded-full bg-white/20 backdrop-blur-md group-hover:scale-100">
+              <FaPlay className="ml-1 text-3xl text-white" />
+            </div>
+          </div>
 
           <button
             onClick={onFavoriteClick}
@@ -146,6 +145,3 @@ export default function MovieCard({ movie }) {
     </>
   );
 }
-
-
-
