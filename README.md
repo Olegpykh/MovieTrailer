@@ -2,16 +2,16 @@
 [Live Demo](https://movie-trailer-eight-indol.vercel.app/)
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/51b0c327-4121-4c13-90cc-23797e50022a" width="500"/>
-  <img src="https://github.com/user-attachments/assets/9beb55de-be03-4137-86e3-7c5256d8a2f2" width="500"/>
-
+  <img src="https://github.com/user-attachments/assets/51b0c327-4121-4c13-90cc-23797e50022a" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/9beb55de-be03-4137-86e3-7c5256d8a2f2" width="45%"/>
 </div>
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/e009c14d-17cb-455a-b782-c1b4dfad07fd" width="500"/>
-  <img src="https://github.com/user-attachments/assets/07857c09-510c-41e7-bd60-962fd02a8f0b" width="500"/>
-
+  <img src="https://github.com/user-attachments/assets/e009c14d-17cb-455a-b782-c1b4dfad07fd" width="45%"/>
+  <img src="https://github.com/user-attachments/assets/07857c09-510c-41e7-bd60-962fd02a8f0b" width="45%"/>
 </div>
+
+
 > A fast, responsive movie & TV show explorer featuring a universal details page, official YouTube trailer modal, and cinematic design — built with clean, modern React.
 
 ## Features
