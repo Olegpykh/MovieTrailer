@@ -1,6 +1,6 @@
 import React from 'react'
 
-function ButtonPage({handleLoadMore,isLoading}) {
+function Button({handleLoadMore,isLoading}) {
   return (
     <button
       onClick={handleLoadMore}
@@ -12,4 +12,4 @@ function ButtonPage({handleLoadMore,isLoading}) {
   );
 }
 
-export default ButtonPage
+export default Button

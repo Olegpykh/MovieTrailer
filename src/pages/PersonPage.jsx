@@ -38,14 +38,14 @@ console.log(id);
      
   const knownFor = credits.cast
     .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-    .slice(0, 12);
+    .slice(0, 30);
 
   const biography = person.biography || 'No biography available.';
   const shouldTruncate = biography.split('\n').join(' ').split(' ').length > 80;
 
   return (
-    <div className="min-h-screen text-white bg-neutral-950">
-      <div className="px-6 pt-32 mx-auto max-w-7xl">
+    <div className="min-h-screen text-black bg-white dark:bg-black/80">
+      <div className="px-6 pt-32 mx-auto text-black max-w-7xl dark:text-white">
         <div className="flex flex-col gap-12 md:flex-row">
           <div className="flex-shrink-0">
             {person.profile_path ? (
@@ -55,19 +55,19 @@ console.log(id);
                 className="w-80 h-[30rem] object-cover rounded-3xl shadow-2xl ring-2 ring-white/20"
               />
             ) : (
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 w-80 h-[30rem] rounded-3xl flex items-center justify-center text-8xl font-bold text-gray-600 shadow-2xl">
+              <div className="bg-gradient-to-br from-gray-800 to-gray-900 w-80 h-[30rem] rounded-3xl flex items-center justify-center text-8xl font-bold text-black shadow-2xl">
                 ?
               </div>
             )}
           </div>
 
-          <div className="flex-1 space-y-8">
+          <div className="flex-1 space-y-8 text-black dark:text-white">
             <div>
               <h1 className="text-5xl font-black leading-none tracking-tight md:text-7xl">
                 {person.name}
               </h1>
 
-              <div className="flex flex-wrap gap-6 mt-6 text-gray-400">
+              <div className="flex flex-wrap gap-6 mt-6 text-black dark:text-white">
                 {person.birthday && (
                   <div className="flex items-center gap-2">
                     <FaBirthdayCake className="w-5 h-5" />
@@ -78,7 +78,7 @@ console.log(id);
                         year: 'numeric',
                       })}
                       {person.deathday && (
-                        <span className="text-gray-500">
+                        <span className="text-black dark:text-white">
                           {' '}
                           —{' '}
                           {new Date(person.deathday).toLocaleDateString(
@@ -104,7 +104,7 @@ console.log(id);
               </div>
             </div>
 
-            <div className="text-lg leading-relaxed text-gray-300">
+            <div className="text-lg leading-relaxed text-black dark:text-white">
               <p
                 className={`transition-all duration-500 ${
                   bioExpanded ? '' : 'line-clamp-4'
@@ -116,7 +116,7 @@ console.log(id);
               {shouldTruncate && !bioExpanded && (
                 <button
                   onClick={() => setBioExpanded(true)}
-                  className="mt-3 font-medium text-yellow-400 transition-colors hover:text-yellow-300"
+                  className="mt-3 font-medium text-yellow-400 transition-colors hover:text-yellow-300 dark:text-yellow-400"
                 >
                   ... Read more
                 </button>
@@ -125,7 +125,7 @@ console.log(id);
               {bioExpanded && (
                 <button
                   onClick={() => setBioExpanded(false)}
-                  className="mt-3 font-medium text-yellow-400 transition-colors hover:text-yellow-300"
+                  className="mt-3 font-medium text-yellow-400 transition-colors hover:text-yellow-300 dark:text-yellow-400"
                 >
                   Show less
                 </button>
@@ -136,7 +136,7 @@ console.log(id);
 
         {knownFor.length > 0 && (
           <div className="mt-20">
-            <h2 className="mb-8 text-3xl font-bold tracking-wider text-gray-200 uppercase">
+            <h2 className="mb-8 text-3xl font-bold tracking-wider text-black uppercase dark:text-white">
               Known For
             </h2>
             <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 md:grid-cols-6">
@@ -162,10 +162,10 @@ console.log(id);
                     />
                   </div>
                   <div className="mt-3 text-center">
-                    <p className="text-sm font-medium text-gray-200 line-clamp-2">
+                    <p className="text-sm font-medium text-black line-clamp-2 dark:text-white">
                       {item.title || item.name}
                     </p>
-                    <p className="mt-1 text-xs text-gray-500">
+                    <p className="mt-1 text-xs text-black dark:text-white">
                       {item.release_date?.slice(0, 4) ||
                         item.first_air_date?.slice(0, 4) ||
                         '—'}

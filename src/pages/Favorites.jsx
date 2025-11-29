@@ -20,8 +20,8 @@ export default function Favorites() {
       <div
         className={`pt-10 transition-colors duration-300 ${
           featuredFavorites.length > 0
-            ? 'bg-white/50'
-            : 'bg-gray-50 dark:bg-gray-900'
+            ? 'bg-white/20  dark:bg-black'
+            : 'bg-white/20 dark:bg-black'
         }`}
       >
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
@@ -37,12 +37,12 @@ export default function Favorites() {
           ) : (
             <div className="py-20 text-center ">
               <div className="w-32 h-32 mx-auto mb-8 bg-gray-200 border-2 border-dashed rounded-xl dark:bg-gray-700" />
-              <p className="mb-6 text-lg text-gray-500 dark:text-gray-400 ">
+              <p className="mb-6 text-lg text-black dark:text-white ">
                 No favorite movies yet. Start adding from the Home page!
               </p>
               <Link
                 to={'/'}
-                className="inline-block px-8 py-3.5 text-lg font-medium text-white transition-all bg-blue-600 rounded-full hover:bg-blue-700 hover:scale-105 shadow-lg"
+                className="inline-block px-8 py-3.5 text-lg font-medium text-black dark:text-white transition-all bg-yellow-400 rounded-full hover:bg-yellow-500 hover:scale-105 shadow-lg"
               >
                 Go to Home Page
               </Link>
