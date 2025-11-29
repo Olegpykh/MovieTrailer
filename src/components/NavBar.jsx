@@ -1,76 +1,153 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchQuery } from '../store/features/movies/movieSlice';
-import { useNavigate } from 'react-router-dom';
+import {
+  Bars3Icon,
+  XMarkIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/24/outline';
+import Switch from 'react-switch';
 
 export default function NavBar() {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.movies.searchQuery);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // бургер меню
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // поиск
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const navigate = useNavigate();
+  const checked = theme === 'dark';
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+  }, [theme]);
+
+  const handleTheme = () => {
+    const newTheme = theme === 'light' ? 'dark' : 'light';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
 
   return (
-    <nav className="fixed top-0 left-0 z-50 w-full shadow-sm bg-white/90 dark:bg-black/80 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 z-50 w-full bg-white dark:bg-black dark:text-white backdrop-blur-md">
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="flex items-center justify-between py-2 sm:h-16">
-          <div className="flex items-center space-x-4 sm:space-x-8">
-            <Link to="/" className="text-sm font-semibold sm:text-base">
+          <div className="flex items-center">
+            <div className="hidden space-x-6 md:flex">
+              <Link to="/" className="font-semibold">
+                Home
+              </Link>
+              <Link to="/movies" className="font-semibold">
+                Movies
+              </Link>
+              <Link to="/series" className="font-semibold">
+                TV Shows
+              </Link>
+              <Link to="/favorites" className="font-semibold">
+                Watchlist
+              </Link>
+            </div>
+
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="p-2"
+              >
+                {isMenuOpen ? (
+                  <XMarkIcon className="w-6 h-6 text-black dark:text-white" />
+                ) : (
+                  <Bars3Icon className="w-6 h-6 text-black dark:text-white" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Switch
+              onChange={handleTheme}
+              checked={checked}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              offColor="#ccc"
+              onColor="#333"
+            />
+
+            <button
+              className="p-2 transition"
+              onClick={() => {
+                if (!isSearchOpen) {
+                  dispatch(setSearchQuery(''));
+                }
+                setIsSearchOpen(!isSearchOpen);
+              }}
+            >
+              <MagnifyingGlassIcon className="text-black h-7 w-7 dark:text-white sm:h-8 sm:w-8" />
+            </button>
+
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => {
+                  dispatch(setSearchQuery(e.target.value));
+                  navigate('/search');
+                }}
+                className={`ml-2 p-2 rounded-xl bg-white text-black 
+                            transition-all duration-300 text-sm sm:text-base
+                            placeholder:text-gray-400 dark:placeholder:text-gray-300
+                            border border-black focus:border-yellow-400
+                            ${
+                              isSearchOpen
+                                ? 'w-32 sm:w-60 opacity-100'
+                                : 'w-0 opacity-0'
+                            } overflow-hidden`}
+              />
+
+              {searchQuery && (
+                <button
+                  onClick={() => dispatch(setSearchQuery(''))}
+                  className="absolute text-gray-500 -translate-y-1/2 right-2 top-1/2 hover:text-black dark:hover:text-white"
+                >
+                  <XMarkIcon className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {isMenuOpen && (
+          <div className="flex flex-col p-4 mt-2 space-y-2 bg-white rounded-lg shadow-lg md:hidden dark:bg-black">
+            <Link
+              to="/"
+              onClick={() => setIsMenuOpen(false)}
+              className="font-semibold"
+            >
               Home
             </Link>
-            <Link to="/movies" className="text-sm font-semibold sm:text-base">
+            <Link
+              to="/movies"
+              onClick={() => setIsMenuOpen(false)}
+              className="font-semibold"
+            >
               Movies
             </Link>
-            <Link to="/series" className="text-sm font-semibold sm:text-base">
+            <Link
+              to="/series"
+              onClick={() => setIsMenuOpen(false)}
+              className="font-semibold"
+            >
               TV Shows
             </Link>
             <Link
               to="/favorites"
-              className="text-sm font-semibold sm:text-base"
+              onClick={() => setIsMenuOpen(false)}
+              className="font-semibold"
             >
               Watchlist
             </Link>
           </div>
-
-          <div className="flex items-center">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 transition"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-gray-900 sm:h-7 sm:w-7 dark:text-gray-100"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-4.35-4.35M10 18a8 8 0 100-16 8 8 0 000 16z"
-                />
-              </svg>
-            </button>
-
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchQuery}
-              onChange={(e) => {
-                dispatch(setSearchQuery(e.target.value));
-                navigate('/search');
-              }}
-              className={`ml-2 p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white 
-                          transition-all duration-300 text-sm sm:text-base
-                          ${
-                            isOpen
-                              ? 'w-32 sm:w-64 opacity-100'
-                              : 'w-0 opacity-0'
-                          } overflow-hidden`}
-            />
-          </div>
-        </div>
+        )}
       </div>
     </nav>
   );

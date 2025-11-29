@@ -16,6 +16,12 @@ const initialState = {
 
   featuredMovies: [],
   featuredTV: [],
+
+  movieDetails: null,
+  tvDetails: null,
+  videos: [],
+  cast: [],
+
   isLoading: false,
   error: null,
 };
@@ -65,6 +71,18 @@ const moviesSlice = createSlice({
     setTopRatedTv: (state, action) => {
       state.topRatedTv = action.payload;
     },
+    setMovieDetails: (state, action) => {
+      state.movieDetails = action.payload;
+    },
+    setTvDetails: (state, action) => {
+      state.tvDetails = action.payload;
+    },
+    setVideos: (state, action) => {
+      state.videos = action.payload;
+    },
+    setCast: (state, action) => {
+      state.cast = action.payload;
+    },
 
     setLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -103,6 +121,10 @@ export const {
   setTvAiringToday,
   setTopRatedTv,
   setFeaturedTV,
+  setMovieDetails,
+  setTvDetails,
+  setVideos,
+  setCast,
   setLoading,
   setError,
   resetAll,
