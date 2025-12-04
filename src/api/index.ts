@@ -12,7 +12,7 @@ export {
   getCreditsFromMovie,
   getCreditsFromTV,
 } from './creditsAndVideos/creditsAndVideos';
-export { getPerson, getPersonCombinedCredits } from './person/person';
+export { getPerson, getPersonCombinedCredits } from './person/person'
 export { getTvDetails, getMovieDetails } from './movieDetails/movieDetails';
 export { getTvOnTheAir } from './tv/tvOnTheAir';
 export { getTvAiringToday } from './tv/tvAiringToday';

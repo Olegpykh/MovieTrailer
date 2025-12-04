@@ -1,11 +1,11 @@
-import NavBar from './components/NavBar.jsx';
-import Favorites from './pages/Favorites.jsx';
-import HomePage from './pages/HomePage.jsx';
-import MoviePage from './pages/MoviePage.jsx';
-import TVPage from './pages/TVPage.jsx';
-import PersonPage from './pages/PersonPage.jsx';
-import MovieDetails from './pages/MovieDetails.jsx';
-import SearchPage from './pages/SearchPage.jsx';
+import NavBar from '@/components/NavBar';
+import Favorites from '@/pages/Favorites';
+import HomePage from '@/pages/HomePage';
+import MoviePage from '@/pages/MoviePage';
+import TVPage from '@/pages/TVPage';
+import PersonPage from '@/pages/PersonPage';
+import MovieDetails from '@/pages/MovieDetails';
+import SearchPage from '@/pages/SearchPage';
 import { Routes, Route } from 'react-router-dom';
 
 

@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MovieCard from '../components/MovieCard';
 import HeroBanner from '../components/HeroBanner';
+// import { RootState } from "../store/store"
+// import { Movie } from '@/types/tmdb';
 
 export default function Favorites() {
   const favorites = useSelector((state) => state.favorites);

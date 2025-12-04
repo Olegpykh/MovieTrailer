@@ -35,6 +35,7 @@ export default function MediaDetails() {
   const { movieDetails, tvDetails, videos, cast, isLoading } = useSelector(
     (state) => state.movies
   );
+  const mediaId = Number(id);
 
   const [trailerModal, setTrailerModal] = useState(false);
 
@@ -43,8 +44,8 @@ export default function MediaDetails() {
       dispatch(setLoading(true));
       try {
         const [movieData, tvData] = await Promise.all([
-          getMovieDetails(id).catch(() => null),
-          getTvDetails(id).catch(() => null),
+          getMovieDetails(mediaId).catch(() => null),
+          getTvDetails(mediaId).catch(() => null),
         ]);
 
         const mediaData = movieData || tvData;
@@ -59,8 +60,11 @@ export default function MediaDetails() {
 
         const creditsFn = movieData ? getCreditsFromMovie : getCreditsFromTV;
         const creditsData = await creditsFn(id);
+        dispatch(setCast(creditsData?.cast || []));
 
-        dispatch(setCast(creditsData || []));
+        // const creditsData = await creditsFn(id);
+
+        // dispatch(setCast(creditsData || []));
       } catch (err) {
         dispatch(setError(err.message));
       } finally {
@@ -73,6 +77,7 @@ export default function MediaDetails() {
 
   const media = movieDetails || tvDetails;
   const isMovie = !!movieDetails;
+  console.log(media);
 
   if (isLoading) {
     return (
@@ -87,16 +92,16 @@ export default function MediaDetails() {
       <div className="flex flex-col items-center justify-center min-h-screen text-white bg-neutral-950">
         <p className="text-2xl">Media not found</p>
         <Link to="/" className="mt-4 text-yellow-400 hover:underline">
-          ← Back to Home
+           Back to Home
         </Link>
       </div>
     );
   }
 
   const trailer =
-    videos.find(
+    videos?.results.find(
       (v) => v.type === 'Trailer' && v.site === 'YouTube' && v.official
-    ) || videos.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
+    ) || videos?.results.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
 
   const youtubeId = trailer?.key;
 
@@ -253,7 +258,7 @@ export default function MediaDetails() {
                 </h2>
 
                 <div className="grid justify-center grid-cols-2 gap-6 pb-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                  {cast.slice(0, 18).map((actor) => (
+                  {cast.slice(0, 18).filter((actor)=>actor.profile_path).map((actor) => (
                     <Link
                       key={actor.id}
                       to={`/person/${actor.id}`}

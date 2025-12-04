@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerson, getPersonCombinedCredits} from "../api/index"
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';

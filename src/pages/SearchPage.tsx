@@ -1,6 +1,10 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { setLoading, setError } from '../store/features/movies/movieSlice';
+import {
+  setLoading,
+  setError,
+  setSearchResults,
+} from '../store/features/movies/movieSlice';
 
 import MovieCard from '../components/MovieCard';
 import { searchMovies } from '../api/index';
@@ -9,8 +13,8 @@ import { Link } from 'react-router-dom';
 export default function SearchPage() {
   const dispatch = useDispatch();
   const searchQuery = useSelector((state) => state.movies.searchQuery);
-
-  const [results, setResults] = useState([]);
+  const results = useSelector((state) => state.movies.searchResults);
+  console.log(results);
 
   const handleSearch = useCallback(
     async (query) => {
@@ -19,7 +23,7 @@ export default function SearchPage() {
 
       try {
         const data = await searchMovies(query);
-        setResults(data.results || []);
+        dispatch(setSearchResults(data.results));
       } catch (err) {
         dispatch(setError(err.message || 'Search failed.'));
       } finally {

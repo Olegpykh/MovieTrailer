@@ -43,10 +43,10 @@ export default function TVPage() {
         getTvTopRated()
       ]);
 
-      dispatch(setPopularTVShows(popular));
-      dispatch(setTvOnTheAir(onAir?.results ?? []));
-      dispatch(setTvAiringToday(airingToday?.results ?? []));
-      dispatch(setTopRatedTv(topRatedTv?.results ?? []))
+      dispatch(setPopularTVShows(popular ?? []));
+      dispatch(setTvOnTheAir(onAir ?? []));
+      dispatch(setTvAiringToday(airingToday ?? []));
+      dispatch(setTopRatedTv(topRatedTv ?? []))
       dispatch(setFeaturedTV(popular.slice(0, 5)));
     } catch (err) {
       dispatch(setError(err.message || 'Failed to load TV shows.'));
