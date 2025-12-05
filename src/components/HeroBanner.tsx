@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-
 import { FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
+import { Movie, TV } from '@/types/tmdb';
 
-export default function HeroBanner({ items = [] }) {
-  const [currentSlide, setCurrentSlide] = useState(0);
+type HeroBannerProps = {
+  items: (Movie | TV)[];
+};
+
+export default function HeroBanner({ items = [] }: HeroBannerProps) {
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
 
   const nextSlide = useCallback(
     () => setCurrentSlide((prev) => (prev + 1) % items.length),
@@ -13,7 +17,7 @@ export default function HeroBanner({ items = [] }) {
     () => setCurrentSlide((prev) => (prev - 1 + items.length) % items.length),
     [items.length]
   );
-  const goToSlide = useCallback((i) => setCurrentSlide(i), []);
+  const goToSlide = useCallback((i: number) => setCurrentSlide(i), []);
 
   useEffect(() => {
     if (items.length <= 1) return;
@@ -25,7 +29,7 @@ export default function HeroBanner({ items = [] }) {
 
   if (!items.length) return null;
 
-  const movie = items[currentSlide];
+  const movie: Movie | TV = items[currentSlide];
 
   const title = movie.title || movie.name || 'Unknown';
   const year =

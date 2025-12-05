@@ -27,13 +27,14 @@ import {
   FaFilm,
   FaTimes,
 } from 'react-icons/fa';
+import { RootState, AppDispatch } from '@/store/store';
 
 export default function MediaDetails() {
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const { movieDetails, tvDetails, videos, cast, isLoading } = useSelector(
-    (state) => state.movies
+    (state:RootState) => state.movies
   );
   const mediaId = Number(id);
 
@@ -56,7 +57,7 @@ export default function MediaDetails() {
 
         const videoFn = movieData ? getMovieVideos : getTvVideos;
         const videoData = await videoFn(id);
-        dispatch(setVideos(videoData));
+        dispatch(setVideos(videoData.results || []));
 
         const creditsFn = movieData ? getCreditsFromMovie : getCreditsFromTV;
         const creditsData = await creditsFn(id);
@@ -99,14 +100,14 @@ export default function MediaDetails() {
   }
 
   const trailer =
-    videos?.results.find(
+    videos?.find(
       (v) => v.type === 'Trailer' && v.site === 'YouTube' && v.official
-    ) || videos?.results.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
+    ) || videos?.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
 
   const youtubeId = trailer?.key;
 
-  const title = isMovie ? media.title : media.name;
-  const releaseDate = isMovie ? media.release_date : media.first_air_date;
+  const title = isMovie ? media?.title : media?.name;
+  const releaseDate = isMovie ? media?.release_date : media?.first_air_date;
   const backdrop = media.backdrop_path
     ? `https://image.tmdb.org/t/p/w1280${media.backdrop_path}`
     : null;
@@ -115,10 +116,10 @@ export default function MediaDetails() {
     : null;
 
   const runtime = isMovie
-    ? media.runtime
+    ? media?.runtime
       ? `${Math.floor(media.runtime / 60)}h ${media.runtime % 60}m`
       : '—'
-    : media.episode_run_time?.[0]
+    : media?.episode_run_time?.[0]
     ? `${media.episode_run_time[0]} min/ep`
     : '—';
 

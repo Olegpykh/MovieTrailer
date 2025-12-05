@@ -14,6 +14,8 @@ export interface Movie {
   title: string;
   vote_average: number;
   genre_ids: number[];
+  name?: string;
+  first_air_date?: string;
 }
 
 export interface TV {
@@ -25,6 +27,8 @@ export interface TV {
   name: string;
   vote_average: number;
   genre_ids: number[];
+  title?: string;
+  release_date?: string;
 }
 
 export interface Genres {
@@ -33,7 +37,7 @@ export interface Genres {
 }
 
 export interface MovieDetails {
-  backdrop_path: string;
+  backdrop_path: string | null;
   genres: Genres[];
   id: number;
   overview: string | null;
@@ -44,6 +48,8 @@ export interface MovieDetails {
   title: string;
   name?: never;
   vote_average: number;
+  first_air_date: string | null;
+  episode_run_time?:number[] | null;
 }
 
 export interface TvDetails {
@@ -57,6 +63,9 @@ export interface TvDetails {
   name: string;
   title?: never;
   vote_average: number;
+  release_date?: string | null;
+  runtime?: number | null;
+  episode_run_time?: number[] | null;
 }
 
 interface BaseSearchResult {
@@ -107,13 +116,13 @@ export type SearchResult =
 export interface Person {
   id: number;
   name: string;
-  biography: string | null;
-  birthday: string | null;
-  deathday: string | null;
-  place_of_birth: string | null;
-  known_for_department: string;
-  profile_path: string | null;
-  popularity: number;
+  biography?: string | null;
+  birthday?: string | null;
+  deathday?: string | null;
+  place_of_birth?: string | null;
+  known_for_department?: string;
+  profile_path?: string | null;
+  popularity?: number;
 }
 
 interface BaseCreditItem {
@@ -147,7 +156,6 @@ export interface CastMember {
   name: string;
   character?: string;
   profile_path: string | null;
-
 }
 
 export interface CreditsResponse {
@@ -172,3 +180,31 @@ export interface VideosResponse {
 
 
 
+export interface PersonCreditsMovieCard {
+  character?: string | null;
+  credit_id?: string | null;
+  id: number;
+  known_for_department?: string | null;
+  name: string | null;
+  order?: number;
+  popularity?: number | null;
+  profile_path?: string | null;
+}
+
+export interface CreditsResponseMovieCard {
+  id: number;
+  cast: PersonCreditsMovieCard[];
+}
+
+
+
+export interface Credit {
+  id: number;
+  media_type: 'movie' | 'tv';
+  poster_path?: string | null;
+  title?: string;
+  name?: string;
+  vote_count?: number;
+  release_date?: string;
+  first_air_date?: string;
+}

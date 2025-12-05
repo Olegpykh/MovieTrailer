@@ -1,27 +1,49 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPerson, getPersonCombinedCredits} from "../api/index"
+import { getPerson, getPersonCombinedCredits } from '../api/index';
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';
+import { Person, Credit } from '@/types/tmdb';
 
 export default function PersonPage() {
   const { id } = useParams();
-  const [person, setPerson] = useState({});
-  const [credits, setCredits] = useState({ cast: []});
+  const [person, setPerson] = useState<Person | null>(null);
+  const [credits, setCredits] = useState<{ cast: Credit[] }>({ cast: [] });
   const [loading, setLoading] = useState(true);
   const [bioExpanded, setBioExpanded] = useState(false);
-console.log(id);
+  console.log(id);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     const [personData, creditsData] = await Promise.all([
+  //       getPerson(id),
+  //       getPersonCombinedCredits(id),
+  //     ]);
+  //     setPerson(personData);
+  //     setCredits(creditsData);
+  //     setLoading(false);
+  //   };
+  //   fetchData();
+  // }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const [personData, creditsData] = await Promise.all([
-        getPerson(id),
-        getPersonCombinedCredits(id),
-      ]);
-      setPerson(personData);
-      setCredits(creditsData);
-      setLoading(false);
+      try {
+        setLoading(true);
+        const [personData, creditsData] = await Promise.all([
+          getPerson(id),
+          getPersonCombinedCredits(id),
+        ]);
+
+        setPerson(personData);
+        setCredits(creditsData);
+      } catch (error) {
+        console.error('Failed to fetch person data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
+
     fetchData();
   }, [id]);
 
@@ -32,15 +54,13 @@ console.log(id);
       </div>
     );
   }
-     console.log(person);
-     console.log(credits);
-     
-     
+
   const knownFor = credits.cast
+    .filter((item) => !!item.poster_path)
     .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
     .slice(0, 30);
 
-  const biography = person.biography || 'No biography available.';
+  const biography = person?.biography || 'No biography available.';
   const shouldTruncate = biography.split('\n').join(' ').split(' ').length > 80;
 
   return (

@@ -1,13 +1,12 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import MovieCard from '../components/MovieCard';
 import HeroBanner from '../components/HeroBanner';
-// import { RootState } from "../store/store"
-// import { Movie } from '@/types/tmdb';
+import { RootState } from '../store/store';
+import { Movie,TV } from '@/types/tmdb';
 
 export default function Favorites() {
-  const favorites = useSelector((state) => state.favorites);
+  const favorites = useSelector((state: RootState) => state.favorites);
 
   const featuredFavorites = favorites
     .filter((movie) => movie.backdrop_path)

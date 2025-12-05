@@ -6,7 +6,7 @@ import {
   getPopularTVShows,
   getTvOnTheAir,
   getTvAiringToday,
-  getTvTopRated
+  getTvTopRated,
 } from '../api/index';
 import {
   setPopularTVShows,
@@ -18,9 +18,11 @@ import {
   resetAll,
   setTopRatedTv,
 } from '../store/features/movies/movieSlice';
+import { RootState, AppDispatch } from '@/store/store';
+import { Movie, TV } from 'types/tmdb';
 
 export default function TVPage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const {
     popularTVShows,
     tvOnTheAir,
@@ -29,27 +31,33 @@ export default function TVPage() {
     featuredTV,
     isLoading,
     error,
-  } = useSelector((state) => state.movies);
+  } = useSelector((state: RootState) => state.movies);
 
   const fetchTV = useCallback(async () => {
     dispatch(setLoading(true));
     dispatch(setError(null));
 
     try {
-      const [popular, onAir, airingToday,topRatedTv] = await Promise.all([
+      const [popular, onAir, airingToday, topRatedTv] = await Promise.all<TV[]>([
         getPopularTVShows(),
         getTvOnTheAir(),
         getTvAiringToday(),
-        getTvTopRated()
+        getTvTopRated(),
       ]);
 
       dispatch(setPopularTVShows(popular ?? []));
       dispatch(setTvOnTheAir(onAir ?? []));
       dispatch(setTvAiringToday(airingToday ?? []));
-      dispatch(setTopRatedTv(topRatedTv ?? []))
-      dispatch(setFeaturedTV(popular.slice(0, 5)));
+      dispatch(setTopRatedTv(topRatedTv ?? []));
+      dispatch(setFeaturedTV(popular.slice(0, 8)));
     } catch (err) {
-      dispatch(setError(err.message || 'Failed to load TV shows.'));
+      if (err instanceof Error) {
+        dispatch(setError(err.message));
+      } else {
+        dispatch(setError('Failed to load TV shows.'));
+      }
+
+      // dispatch(setError(err.message || 'Failed to load TV shows.'));
     } finally {
       dispatch(setLoading(false));
     }

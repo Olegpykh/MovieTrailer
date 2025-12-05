@@ -18,9 +18,11 @@ import {
   resetAll,
 } from '../store/features/movies/movieSlice';
 import CategoryRow from '../components/CategoryRow';
+import { RootState, AppDispatch } from '@/store/store';
+import { Movie, TV } from 'types/tmdb';
 
 export default function Home() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const {
     movies,
     upcomingMovies,
@@ -29,7 +31,7 @@ export default function Home() {
     featuredMovies,
     isLoading,
     error,
-  } = useSelector((state) => state.movies);
+  } = useSelector((state: RootState) => state.movies);
 
   const fetchAll = useCallback(async () => {
     dispatch(setLoading(true));
@@ -46,10 +48,13 @@ export default function Home() {
       dispatch(setMovies(popularMovies));
       dispatch(setUpcomingMovies(upcoming));
       dispatch(setPopularTVShows(tvShows));
-      dispatch(setTvOnTheAir(tvOnAir?.results ?? []));
-      dispatch(setFeaturedMovies(popularMovies.slice(0, 5)));
+      dispatch(setTvOnTheAir(tvOnAir));
+      dispatch(setFeaturedMovies(popularMovies.slice(0, 8)));
     } catch (err) {
-      dispatch(setError(err.message || 'Failed to load data.'));
+      // dispatch(setError(err.message || 'Failed to load data.'));
+      const message =
+        err instanceof Error ? err.message : 'Failed to load data.';
+      dispatch(setError(message));
     } finally {
       dispatch(setLoading(false));
     }
@@ -62,7 +67,6 @@ export default function Home() {
 
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
-  console.log('Items for Popular Movies:', movies);
 
   return (
     <>

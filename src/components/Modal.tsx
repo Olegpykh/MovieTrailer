@@ -1,6 +1,18 @@
+import { Movie, PersonCreditsMovieCard, TV } from '@/types/tmdb';
 import React from 'react';
 import { FaStar, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+
+interface ModalProps {
+  movie: Movie | TV;
+  closeModal: () => void;
+  poster: string | null;
+  title: string | null;
+  trailerKey: string | null;
+  trailerName: string;
+  year: number | 'N/A';
+  allCredits: PersonCreditsMovieCard[];
+}
 
 export default function Modal({
   movie,
@@ -11,11 +23,11 @@ export default function Modal({
   trailerName,
   year,
   allCredits = [],
-}) {
+}: ModalProps) {
   const navigate = useNavigate();
   const topCast = allCredits.filter((actor) => actor.profile_path).slice(0, 6);
 
-  const handleActorClick = (id) => {
+  const handleActorClick = (id: number) => {
     navigate(`/person/${id}`);
     closeModal();
   };

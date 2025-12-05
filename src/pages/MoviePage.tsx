@@ -18,9 +18,10 @@ import {
   setError,
   resetAll,
 } from '../store/features/movies/movieSlice';
+import { RootState, AppDispatch } from '@/store/store';
 
 export default function MoviePage() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const {
     movies,
     upcomingMovies,
@@ -29,7 +30,7 @@ export default function MoviePage() {
     featuredMovies,
     isLoading,
     error,
-  } = useSelector((state) => state.movies);
+  } = useSelector((state:RootState) => state.movies);
 
   const fetchMovies = useCallback(async () => {
     dispatch(setLoading(true));
@@ -45,9 +46,9 @@ export default function MoviePage() {
 
       dispatch(setMovies(popular));
       dispatch(setUpcomingMovies(upcoming));
-      dispatch(setTopRatedMovies(topRated.results ?? topRated));
+      dispatch(setTopRatedMovies(topRated));
       dispatch(setNowPlayingMovies(nowPlaying));
-      dispatch(setFeaturedMovies(popular.slice(0, 5)));
+      dispatch(setFeaturedMovies(popular.slice(0, 8)));
     } catch (err) {
       dispatch(setError(err.message || 'Failed to load movies.'));
     } finally {

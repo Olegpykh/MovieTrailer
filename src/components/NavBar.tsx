@@ -8,12 +8,15 @@ import {
   MagnifyingGlassIcon,
 } from '@heroicons/react/24/outline';
 import Switch from 'react-switch';
+import { RootState, AppDispatch } from '@/store/store';
 
 export default function NavBar() {
-  const dispatch = useDispatch();
-  const searchQuery = useSelector((state) => state.movies.searchQuery);
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // бургер меню
-  const [isSearchOpen, setIsSearchOpen] = useState(false); // поиск
+  const dispatch = useDispatch<AppDispatch>();
+  const searchQuery = useSelector(
+    (state: RootState) => state.movies.searchQuery
+  );
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
   const navigate = useNavigate();
   const checked = theme === 'dark';
@@ -22,7 +25,7 @@ export default function NavBar() {
     document.documentElement.classList.toggle('dark', theme === 'dark');
   }, [theme]);
 
-  const handleTheme = () => {
+  const handleTheme: () => void = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
@@ -89,7 +92,7 @@ export default function NavBar() {
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e) => {
+                onChange={(e:React.ChangeEvent<HTMLInputElement>) => {
                   dispatch(setSearchQuery(e.target.value));
                   navigate('/search');
                 }}

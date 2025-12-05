@@ -1,23 +1,31 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLoading,
   setError,
   setSearchResults,
 } from '../store/features/movies/movieSlice';
-
+import { RootState, AppDispatch } from '@/store/store';
+import {
+  MovieSearchResult,
+  TvSearchResult,
+  PersonSearchResult,
+  SearchResult,
+} from '@/types/tmdb';
 import MovieCard from '../components/MovieCard';
 import { searchMovies } from '../api/index';
 import { Link } from 'react-router-dom';
 
 export default function SearchPage() {
-  const dispatch = useDispatch();
-  const searchQuery = useSelector((state) => state.movies.searchQuery);
-  const results = useSelector((state) => state.movies.searchResults);
+  const dispatch = useDispatch<AppDispatch>();
+  const searchQuery = useSelector(
+    (state: RootState) => state.movies.searchQuery
+  );
+  const results = useSelector((state: RootState) => state.movies.searchResults);
   console.log(results);
 
   const handleSearch = useCallback(
-    async (query) => {
+    async (query: string): Promise<void> => {
       dispatch(setLoading(true));
       dispatch(setError(null));
 
@@ -25,7 +33,12 @@ export default function SearchPage() {
         const data = await searchMovies(query);
         dispatch(setSearchResults(data.results));
       } catch (err) {
-        dispatch(setError(err.message || 'Search failed.'));
+        if (err instanceof Error) {
+          dispatch(setError(err.message));
+        } else {
+          dispatch(setError('Search failed'));
+        }
+   
       } finally {
         dispatch(setLoading(false));
       }
@@ -39,15 +52,32 @@ export default function SearchPage() {
     }
   }, [searchQuery, handleSearch]);
 
-  const movies = results.filter(
-    (item) => item.media_type === 'movie' && item.poster_path
-  );
-  const tvShows = results.filter(
-    (item) => item.media_type === 'tv' && item.poster_path
-  );
-  const people = results.filter(
-    (item) => item.media_type === 'person' && item.profile_path
-  );
+  // const movies = results.filter(
+  //   (item) => item.media_type === 'movie' && item.poster_path
+  // );
+
+  // const tvShows = results.filter(
+  //   (item) => item.media_type === 'tv' && item.poster_path
+  // );
+  // const people = results.filter(
+  //   (item) => item.media_type === 'person' && item.profile_path
+  // );
+
+  function isMovie(item: SearchResult): item is MovieSearchResult {
+    return item.media_type === 'movie' && !!item.poster_path;
+  }
+
+  function isTV(item: SearchResult): item is TvSearchResult {
+    return item.media_type === 'tv' && !!item.poster_path;
+  }
+
+  function isPerson(item: SearchResult): item is PersonSearchResult {
+    return item.media_type === 'person' && !!item.profile_path;
+  }
+
+  const movies = results.filter(isMovie);
+  const tvShows = results.filter(isTV);
+  const people = results.filter(isPerson);
 
   return (
     <div className="px-4 py-20 mx-auto max-w-7xl sm:px-6 lg:px-8">

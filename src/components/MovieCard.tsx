@@ -8,21 +8,46 @@ import {
 import { getMovieVideos, getTvVideos } from '../api/index';
 import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
 import Modal from './Modal';
+import { RootState, AppDispatch } from '@/store/store';
+import { Movie, TV } from '@/types/tmdb';
+import {PersonCreditsMovieCard,CreditsResponseMovieCard} from "../types/tmdb"
 
-export default function MovieCard({ movie }) {
-  const dispatch = useDispatch();
-  const favorites = useSelector((state) => state.favorites);
+type MediaCardProps = {
+  movie: Movie | TV;
+};
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [trailerKey, setTrailerKey] = useState(null);
-  const [trailerName, setTrailerName] = useState('');
-  const [castTV, setCastTV] = useState([]);
-  const [castMovie, setCastMovie] = useState([]);
+// interface PersonCreditsMovieCard {
+//   character?: string | null;
+//   credit_id?: string | null;
+//   id: number;
+//   known_for_department?: string | null;
+//   name: string | null;
+//   order?: number;
+//   popularity?: number | null;
+//   profile_path?: string | null;
+// }
+
+// interface CreditsResponse {
+//   id: number;
+//   cast: PersonCreditsMovieCard[];
+// }
+
+export default function MovieCard({ movie }: MediaCardProps) {
+  console.log(movie);
+  
+  const dispatch = useDispatch<AppDispatch>();
+  const favorites = useSelector((state: RootState) => state.favorites);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [trailerKey, setTrailerKey] = useState<string | null>(null);
+  const [trailerName, setTrailerName] = useState<string>('');
+  const [castTV, setCastTV] = useState<PersonCreditsMovieCard[]>([]);
+  const [castMovie, setCastMovie] = useState<PersonCreditsMovieCard[]>([]);
 
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
   const onFavoriteClick = useCallback(
-    (e) => {
+    (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
       if (isFavorite) {
         dispatch(deleteFromFavorites({ id: movie.id }));
@@ -39,56 +64,15 @@ export default function MovieCard({ movie }) {
     setTrailerName('');
   }, []);
 
-  // const openModal = useCallback(async () => {
-  //   setIsModalOpen(true);
-
-  //   try {
-  //     const [movieVideos, tvVideos] = await Promise.all([
-  //       getMovieVideos(movie.id),
-  //       getTvVideos(movie.id),
-  //     ]);
-
-  //     const allVideos = [...movieVideos, ...tvVideos];
-
-  //     const trailer = allVideos.find(
-  //       (v) => v.site === 'YouTube' && ['Trailer'].includes(v.type)
-  //     );
-
-  //     setTrailerKey(trailer?.key || null);
-  //     setTrailerName(trailer?.name || '');
-  //   } catch (err) {
-  //     console.error('Failed to load trailer:', err);
-  //     setTrailerKey(null);
-  //     setTrailerName('');
-  //   }
-  // }, [movie]);
-
-  // useEffect(() => {
-  //   const fetchTvCredits = async () => {
-  //     const data = await getCreditsFromTV(movie.id);
-  //     setCastTV(data);
-  //   };
-  //   fetchTvCredits();
-  // }, [movie.id]);
-
-  // useEffect(() => {
-  //   const fetchMovieCredits = async () => {
-  //     const data = await getCreditsFromMovie(movie.id);
-  //     setCastMovie(data);
-  //   };
-  //   fetchMovieCredits();
-  // }, [movie.id]);
-
-  // const allCredits = [...castTV, ...castMovie];
-
   const openModal = useCallback(async () => {
     setIsModalOpen(true);
 
     try {
       const [movieVideos, tvVideos] = await Promise.all([
-        getMovieVideos(movie.id),
-        getTvVideos(movie.id),
+        getMovieVideos(String(movie.id)),
+        getTvVideos(String(movie.id)),
       ]);
+      console.log(movieVideos, tvVideos);
 
       const allVideos = [
         ...(movieVideos.results || []),
@@ -110,25 +94,31 @@ export default function MovieCard({ movie }) {
 
   useEffect(() => {
     const fetchTvCredits = async () => {
-      const data = await getCreditsFromTV(movie.id);
-      setCastTV(data);
+      const data:CreditsResponseMovieCard = await getCreditsFromTV(String(movie.id));
+      console.log(data.cast);
+
+      setCastTV(data.cast);
     };
     fetchTvCredits();
   }, [movie.id]);
 
   useEffect(() => {
     const fetchMovieCredits = async () => {
-      const data = await getCreditsFromMovie(movie.id);
-      setCastMovie(data);
+      const data:CreditsResponseMovieCard = await getCreditsFromMovie(String(movie.id));
+      console.log(data);
+
+      setCastMovie(data.cast);
     };
     fetchMovieCredits();
   }, [movie.id]);
 
-  const allCredits = [...(castTV.cast || []), ...(castMovie.cast || [])];
+  // const allCredits = [...(castTV.cast || []), ...(castMovie.cast || [])];
+  const allCredits = [...castMovie, ...castTV];
+  console.log(allCredits);
+  
 
-
-  const title = movie.title || movie.name || 'No name';
-  const releaseDate = movie.release_date || movie.first_air_date;
+  const title:string = movie.title || movie.name || 'No name';
+  const releaseDate:string = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
   const poster = movie.poster_path
     ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
