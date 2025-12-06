@@ -16,24 +16,9 @@ type MediaCardProps = {
   movie: Movie | TV;
 };
 
-// interface PersonCreditsMovieCard {
-//   character?: string | null;
-//   credit_id?: string | null;
-//   id: number;
-//   known_for_department?: string | null;
-//   name: string | null;
-//   order?: number;
-//   popularity?: number | null;
-//   profile_path?: string | null;
-// }
-
-// interface CreditsResponse {
-//   id: number;
-//   cast: PersonCreditsMovieCard[];
-// }
 
 export default function MovieCard({ movie }: MediaCardProps) {
-  console.log(movie);
+
   
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites);
@@ -112,13 +97,13 @@ export default function MovieCard({ movie }: MediaCardProps) {
     fetchMovieCredits();
   }, [movie.id]);
 
-  // const allCredits = [...(castTV.cast || []), ...(castMovie.cast || [])];
+
   const allCredits = [...castMovie, ...castTV];
-  console.log(allCredits);
+
   
 
   const title:string = movie.title || movie.name || 'No name';
-  const releaseDate:string = movie.release_date || movie.first_air_date;
+  const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
   const poster = movie.poster_path
     ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`

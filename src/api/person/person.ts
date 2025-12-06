@@ -24,14 +24,16 @@ const fetchPerson = async <T>(id: string, details: string = ''): Promise<T> => {
     const response = await client.get<T>(url);
     return response.data;
   } catch (err) {
-    console.error((err as Error).message || 'Failed to fetch');
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error('Failed to fetch');
+    }
+
     if (details === 'combined_credits') {
       return { ...emptyCredits, id: parseInt(id) || 0 } as T;
     }
-    return {
-      ...emptyPerson,
-      id: parseInt(id) || 0,
-    } as T;
+    return { ...emptyPerson, id: parseInt(id) || 0 } as T;
   }
 };
 

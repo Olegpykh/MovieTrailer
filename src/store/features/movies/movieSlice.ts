@@ -67,7 +67,7 @@ const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {
-    // search
+
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
@@ -76,7 +76,6 @@ const moviesSlice = createSlice({
     },
     
 
-    // movies
     setMovies: (state, action: PayloadAction<Movie[]>) => {
       state.movies = action.payload;
     },
@@ -94,7 +93,7 @@ const moviesSlice = createSlice({
     },
 
 
-    // tv shows
+  
     setPopularTVShows: (state, action: PayloadAction<TV[]>) => {
       state.popularTVShows = action.payload;
     },
@@ -112,7 +111,7 @@ const moviesSlice = createSlice({
     },
 
 
-    // details
+
     setMovieDetails: (state, action: PayloadAction<MovieDetails | null>) => {
       state.movieDetails = action.payload;
     },

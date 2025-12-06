@@ -6,29 +6,29 @@ export type ApiResponce<T extends object> = {
 };
 
 export interface Movie {
-  backdrop_path: string;
+  backdrop_path: string | null;
   id: number;
-  overview: string;
-  poster_path: string;
-  release_date: string;
+  overview: string | null;
+  poster_path: string | null;
+  release_date: string | null;
   title: string;
   vote_average: number;
   genre_ids: number[];
-  name?: string;
-  first_air_date?: string;
+  name?: string; 
+  first_air_date?: string | null;
 }
 
 export interface TV {
-  backdrop_path: string;
+  backdrop_path: string | null;
   id: number;
-  overview: string;
-  poster_path: string;
-  first_air_date: string;
+  overview: string | null;
+  poster_path: string | null;
+  first_air_date: string | null;
   name: string;
   vote_average: number;
   genre_ids: number[];
-  title?: string;
-  release_date?: string;
+  title?: string; 
+  release_date?: string | null;
 }
 
 export interface Genres {
@@ -49,7 +49,7 @@ export interface MovieDetails {
   name?: never;
   vote_average: number;
   first_air_date: string | null;
-  episode_run_time?:number[] | null;
+  episode_run_time?: number[] | null;
 }
 
 export interface TvDetails {
@@ -130,18 +130,23 @@ interface BaseCreditItem {
   media_type: 'movie' | 'tv';
   poster_path: string | null;
   character?: string;
+  vote_count?: number;
+  name?: string;
+  title?: string;
 }
 
 interface MovieCredit extends BaseCreditItem {
   media_type: 'movie';
   title: string;
   release_date: string | null;
+  first_air_date?: string | null;
 }
 
 interface TvCredit extends BaseCreditItem {
   media_type: 'tv';
   name: string;
   first_air_date: string | null;
+  release_date?: string | null;
 }
 
 export type CreditItem = MovieCredit | TvCredit;
@@ -178,8 +183,6 @@ export interface VideosResponse {
   results: VideoItem[];
 }
 
-
-
 export interface PersonCreditsMovieCard {
   character?: string | null;
   credit_id?: string | null;
@@ -195,8 +198,6 @@ export interface CreditsResponseMovieCard {
   id: number;
   cast: PersonCreditsMovieCard[];
 }
-
-
 
 export interface Credit {
   id: number;

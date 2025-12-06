@@ -31,10 +31,11 @@ import { RootState, AppDispatch } from '@/store/store';
 
 export default function MediaDetails() {
   const { id } = useParams();
+
   const dispatch = useDispatch<AppDispatch>();
 
   const { movieDetails, tvDetails, videos, cast, isLoading } = useSelector(
-    (state:RootState) => state.movies
+    (state: RootState) => state.movies
   );
   const mediaId = Number(id);
 
@@ -42,18 +43,19 @@ export default function MediaDetails() {
 
   useEffect(() => {
     const fetchAll = async () => {
+      if (!id) return;
       dispatch(setLoading(true));
       try {
         const [movieData, tvData] = await Promise.all([
-          getMovieDetails(mediaId).catch(() => null),
-          getTvDetails(mediaId).catch(() => null),
+          getMovieDetails(mediaId),
+          getTvDetails(mediaId),
         ]);
 
         const mediaData = movieData || tvData;
         if (!mediaData) throw new Error('Not found');
 
-        dispatch(setMovieDetails(movieData));
-        dispatch(setTvDetails(tvData));
+        dispatch(setMovieDetails(movieData ?? null));
+        dispatch(setTvDetails(tvData ?? null));
 
         const videoFn = movieData ? getMovieVideos : getTvVideos;
         const videoData = await videoFn(id);
@@ -62,12 +64,12 @@ export default function MediaDetails() {
         const creditsFn = movieData ? getCreditsFromMovie : getCreditsFromTV;
         const creditsData = await creditsFn(id);
         dispatch(setCast(creditsData?.cast || []));
-
-        // const creditsData = await creditsFn(id);
-
-        // dispatch(setCast(creditsData || []));
       } catch (err) {
-        dispatch(setError(err.message));
+        if (err instanceof Error) {
+          dispatch(setError(err.message));
+        } else {
+          dispatch(setError('Failed to load data.'));
+        }
       } finally {
         dispatch(setLoading(false));
       }
@@ -78,7 +80,6 @@ export default function MediaDetails() {
 
   const media = movieDetails || tvDetails;
   const isMovie = !!movieDetails;
-  console.log(media);
 
   if (isLoading) {
     return (
@@ -93,7 +94,7 @@ export default function MediaDetails() {
       <div className="flex flex-col items-center justify-center min-h-screen text-white bg-neutral-950">
         <p className="text-2xl">Media not found</p>
         <Link to="/" className="mt-4 text-yellow-400 hover:underline">
-           Back to Home
+          Back to Home
         </Link>
       </div>
     );
@@ -127,7 +128,7 @@ export default function MediaDetails() {
     <>
       <div className="min-h-screen text-white bg-neutral-950">
         <div className="relative">
-          {/* Backdrop */}
+    
           {backdrop && (
             <div className="absolute inset-0">
               <img
@@ -140,7 +141,7 @@ export default function MediaDetails() {
             </div>
           )}
 
-          {/* Main Content */}
+        
           <div className="relative z-10 px-6 pt-32 pb-20 mx-auto max-w-7xl">
             <Link
               to="/"
@@ -150,7 +151,7 @@ export default function MediaDetails() {
             </Link>
 
             <div className="flex flex-col gap-12 md:flex-row">
-              {/* Poster */}
+             
               <div className="flex-shrink-0">
                 {poster ? (
                   <img
@@ -166,7 +167,7 @@ export default function MediaDetails() {
                 )}
               </div>
 
-              {/* Info */}
+          
               <div className="flex-1 space-y-8">
                 <div>
                   <div className="flex items-center gap-4 mb-2">
@@ -212,7 +213,6 @@ export default function MediaDetails() {
                   </div>
                 </div>
 
-                {/* Genres */}
                 <div className="flex flex-wrap gap-3">
                   {media.genres?.map((g) => (
                     <span
@@ -224,7 +224,7 @@ export default function MediaDetails() {
                   ))}
                 </div>
 
-                {/* Overview */}
+       
                 <div className="text-lg leading-relaxed text-gray-300">
                   <h2 className="mb-4 text-2xl font-bold text-white">
                     Overview
@@ -232,7 +232,7 @@ export default function MediaDetails() {
                   <p>{media.overview || 'No overview available.'}</p>
                 </div>
 
-                {/* Trailer Button */}
+            
                 {youtubeId ? (
                   <button
                     onClick={() => setTrailerModal(true)}
@@ -251,7 +251,6 @@ export default function MediaDetails() {
               </div>
             </div>
 
-            {/* Cast Section */}
             {cast.length > 0 && (
               <div className="mt-16">
                 <h2 className="mb-6 text-3xl font-bold text-center text-white">
@@ -259,32 +258,35 @@ export default function MediaDetails() {
                 </h2>
 
                 <div className="grid justify-center grid-cols-2 gap-6 pb-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-                  {cast.slice(0, 18).filter((actor)=>actor.profile_path).map((actor) => (
-                    <Link
-                      key={actor.id}
-                      to={`/person/${actor.id}`}
-                      className="block mx-auto text-center w-36 group"
-                    >
-                      {actor.profile_path ? (
-                        <img
-                          src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
-                          alt={actor.name}
-                          className="object-cover transition-transform shadow-2xl w-36 h-52 rounded-2xl group-hover:scale-105"
-                          loading="lazy"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center text-6xl font-bold text-gray-600 bg-gray-800 w-36 h-52 rounded-2xl">
-                          ?
-                        </div>
-                      )}
-                      <p className="mt-3 text-sm font-semibold text-white line-clamp-2">
-                        {actor.name}
-                      </p>
-                      <p className="text-xs text-gray-400 line-clamp-2">
-                        {actor.character}
-                      </p>
-                    </Link>
-                  ))}
+                  {cast
+                    .slice(0, 18)
+                    .filter((actor) => actor.profile_path)
+                    .map((actor) => (
+                      <Link
+                        key={actor.id}
+                        to={`/person/${actor.id}`}
+                        className="block mx-auto text-center w-36 group"
+                      >
+                        {actor.profile_path ? (
+                          <img
+                            src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
+                            alt={actor.name}
+                            className="object-cover transition-transform shadow-2xl w-36 h-52 rounded-2xl group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center text-6xl font-bold text-gray-600 bg-gray-800 w-36 h-52 rounded-2xl">
+                            ?
+                          </div>
+                        )}
+                        <p className="mt-3 text-sm font-semibold text-white line-clamp-2">
+                          {actor.name}
+                        </p>
+                        <p className="text-xs text-gray-400 line-clamp-2">
+                          {actor.character}
+                        </p>
+                      </Link>
+                    ))}
                 </div>
               </div>
             )}
@@ -292,7 +294,7 @@ export default function MediaDetails() {
         </div>
       </div>
 
-      {/* Trailer Modal */}
+
       {trailerModal && youtubeId && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"

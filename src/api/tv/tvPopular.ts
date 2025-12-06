@@ -6,7 +6,11 @@ export const getPopularTVShows = async (): Promise<TV[]> => {
     const { data } = await client.get<ApiResponce<TV>>('/tv/popular');
     return data.results;
   } catch (error) {
-    console.error(error.message);
-    return [];
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error('Unknown error');
+    }
+    return []
   }
 };

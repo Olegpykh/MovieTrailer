@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setLoading,
@@ -22,7 +22,7 @@ export default function SearchPage() {
     (state: RootState) => state.movies.searchQuery
   );
   const results = useSelector((state: RootState) => state.movies.searchResults);
-  console.log(results);
+
 
   const handleSearch = useCallback(
     async (query: string): Promise<void> => {
@@ -38,7 +38,6 @@ export default function SearchPage() {
         } else {
           dispatch(setError('Search failed'));
         }
-   
       } finally {
         dispatch(setLoading(false));
       }
@@ -51,17 +50,6 @@ export default function SearchPage() {
       handleSearch(searchQuery);
     }
   }, [searchQuery, handleSearch]);
-
-  // const movies = results.filter(
-  //   (item) => item.media_type === 'movie' && item.poster_path
-  // );
-
-  // const tvShows = results.filter(
-  //   (item) => item.media_type === 'tv' && item.poster_path
-  // );
-  // const people = results.filter(
-  //   (item) => item.media_type === 'person' && item.profile_path
-  // );
 
   function isMovie(item: SearchResult): item is MovieSearchResult {
     return item.media_type === 'movie' && !!item.poster_path;

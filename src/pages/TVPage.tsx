@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
 import CategoryRow from '../components/CategoryRow';
@@ -19,7 +19,7 @@ import {
   setTopRatedTv,
 } from '../store/features/movies/movieSlice';
 import { RootState, AppDispatch } from '@/store/store';
-import { Movie, TV } from 'types/tmdb';
+import { TV } from 'types/tmdb';
 
 export default function TVPage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -38,12 +38,14 @@ export default function TVPage() {
     dispatch(setError(null));
 
     try {
-      const [popular, onAir, airingToday, topRatedTv] = await Promise.all<TV[]>([
-        getPopularTVShows(),
-        getTvOnTheAir(),
-        getTvAiringToday(),
-        getTvTopRated(),
-      ]);
+      const [popular, onAir, airingToday, topRatedTv] = await Promise.all<TV[]>(
+        [
+          getPopularTVShows(),
+          getTvOnTheAir(),
+          getTvAiringToday(),
+          getTvTopRated(),
+        ]
+      );
 
       dispatch(setPopularTVShows(popular ?? []));
       dispatch(setTvOnTheAir(onAir ?? []));
@@ -56,8 +58,6 @@ export default function TVPage() {
       } else {
         dispatch(setError('Failed to load TV shows.'));
       }
-
-      // dispatch(setError(err.message || 'Failed to load TV shows.'));
     } finally {
       dispatch(setLoading(false));
     }

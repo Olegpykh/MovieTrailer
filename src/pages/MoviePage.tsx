@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
 import CategoryRow from '../components/CategoryRow';
@@ -12,7 +12,7 @@ import {
   setMovies,
   setUpcomingMovies,
   setTopRatedMovies,
-   setNowPlayingMovies,
+  setNowPlayingMovies,
   setFeaturedMovies,
   setLoading,
   setError,
@@ -30,7 +30,7 @@ export default function MoviePage() {
     featuredMovies,
     isLoading,
     error,
-  } = useSelector((state:RootState) => state.movies);
+  } = useSelector((state: RootState) => state.movies);
 
   const fetchMovies = useCallback(async () => {
     dispatch(setLoading(true));
@@ -50,7 +50,12 @@ export default function MoviePage() {
       dispatch(setNowPlayingMovies(nowPlaying));
       dispatch(setFeaturedMovies(popular.slice(0, 8)));
     } catch (err) {
-      dispatch(setError(err.message || 'Failed to load movies.'));
+      if (err instanceof Error) {
+        dispatch(setError(err.message));
+      } else {
+        dispatch(setError('Failed to load movies.'));
+      }
+
     } finally {
       dispatch(setLoading(false));
     }
@@ -78,6 +83,4 @@ export default function MoviePage() {
       </div>
     </>
   );
-
-  
 }

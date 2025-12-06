@@ -1,20 +1,19 @@
-
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import MovieCard from './MovieCard';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Movie, TV } from 'types/tmdb';
 
 type CategoryRowProps = {
-  title:string,
-  items: (Movie | TV)[]
-}
+  title: string;
+  items: (Movie | TV)[];
+};
 
-export default function CategoryRow({ title, items = [] }:CategoryRowProps) {
-  const scrollContainerRef = useRef(null);
+export default function CategoryRow({ title, items = [] }: CategoryRowProps) {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   if (!items || items.length === 0) return null;
 
-  const scroll = (direction) => {
+  const scroll = (direction: "left" | "right") => {
     const container = scrollContainerRef.current;
     if (!container) return;
 

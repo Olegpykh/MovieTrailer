@@ -6,7 +6,11 @@ export const getTvOnTheAir = async (): Promise<TV[]> => {
     const { data } = await client.get<ApiResponce<TV>>('tv/on_the_air');
     return data.results;
   } catch (error) {
-    console.log(error.message);
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error('Unknown error');
+    }
     return [];
   }
 };

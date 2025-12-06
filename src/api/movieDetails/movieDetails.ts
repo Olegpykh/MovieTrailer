@@ -10,8 +10,12 @@ const fetchMovieAndTvDetails = async <T>(
   try {
     const res = await client.get<T>(`/${type}/${id}`);
     return res.data;
-  } catch (error) {
-    console.error(error.message);
+  } catch (err) {
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error('Data failed to fetch');
+    }
     return undefined;
   }
 };

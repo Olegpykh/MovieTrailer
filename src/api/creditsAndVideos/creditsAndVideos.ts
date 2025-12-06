@@ -10,7 +10,11 @@ const fetchCreditsAndVideos = async <T>(
     const response = await client.get<T>(`${type}/${id}/${resource}`);
     return response.data;
   } catch (err) {
-    console.error((err as Error).message || 'Data failed to fetch');
+    if (err instanceof Error) {
+      console.error(err.message);
+    } else {
+      console.error('Data failed to fetch');
+    }
 
     if (resource === 'credits') {
       return { id: parseInt(id) || 0, cast: [] } as T;
@@ -31,4 +35,3 @@ export const getMovieVideos = (id: string) =>
   fetchCreditsAndVideos<VideosResponse>('movie', id, 'videos');
 export const getTvVideos = (id: string) =>
   fetchCreditsAndVideos<VideosResponse>('tv', id, 'videos');
-

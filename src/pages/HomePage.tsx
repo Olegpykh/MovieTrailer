@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
 import {
@@ -19,7 +19,6 @@ import {
 } from '../store/features/movies/movieSlice';
 import CategoryRow from '../components/CategoryRow';
 import { RootState, AppDispatch } from '@/store/store';
-import { Movie, TV } from 'types/tmdb';
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
@@ -51,7 +50,6 @@ export default function Home() {
       dispatch(setTvOnTheAir(tvOnAir));
       dispatch(setFeaturedMovies(popularMovies.slice(0, 8)));
     } catch (err) {
-      // dispatch(setError(err.message || 'Failed to load data.'));
       const message =
         err instanceof Error ? err.message : 'Failed to load data.';
       dispatch(setError(message));

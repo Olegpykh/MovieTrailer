@@ -2,37 +2,23 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPerson, getPersonCombinedCredits } from '../api/index';
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';
-import { Person, Credit } from '@/types/tmdb';
+import { Person, PersonCombinedCredits, CreditItem } from '@/types/tmdb';
 
 export default function PersonPage() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const [person, setPerson] = useState<Person | null>(null);
-  const [credits, setCredits] = useState<{ cast: Credit[] }>({ cast: [] });
+  const [credits, setCredits] = useState<PersonCombinedCredits | null>(null);
   const [loading, setLoading] = useState(true);
   const [bioExpanded, setBioExpanded] = useState(false);
+
   console.log(id);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     const [personData, creditsData] = await Promise.all([
-  //       getPerson(id),
-  //       getPersonCombinedCredits(id),
-  //     ]);
-  //     setPerson(personData);
-  //     setCredits(creditsData);
-  //     setLoading(false);
-  //   };
-  //   fetchData();
-  // }, [id]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
         const [personData, creditsData] = await Promise.all([
-          getPerson(id),
-          getPersonCombinedCredits(id),
+          getPerson(String(id)),
+          getPersonCombinedCredits(String(id)),
         ]);
 
         setPerson(personData);
@@ -55,12 +41,19 @@ export default function PersonPage() {
     );
   }
 
-  const knownFor = credits.cast
-    .filter((item) => !!item.poster_path)
-    .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-    .slice(0, 30);
+  const knownFor: CreditItem[] =
+    credits?.cast
+      ?.filter((item) => !!item.poster_path)
+      .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
+      .slice(0, 30) ?? [];
+
+    
+
+  console.log(knownFor);
 
   const biography = person?.biography || 'No biography available.';
+  console.log(biography);
+
   const shouldTruncate = biography.split('\n').join(' ').split(' ').length > 80;
 
   return (
@@ -68,7 +61,7 @@ export default function PersonPage() {
       <div className="px-6 pt-32 mx-auto text-black max-w-7xl dark:text-white">
         <div className="flex flex-col gap-12 md:flex-row">
           <div className="flex-shrink-0">
-            {person.profile_path ? (
+            {person?.profile_path ? (
               <img
                 src={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
                 alt={person.name}
@@ -84,11 +77,11 @@ export default function PersonPage() {
           <div className="flex-1 space-y-8 text-black dark:text-white">
             <div>
               <h1 className="text-5xl font-black leading-none tracking-tight md:text-7xl">
-                {person.name}
+                {person?.name}
               </h1>
 
               <div className="flex flex-wrap gap-6 mt-6 text-black dark:text-white">
-                {person.birthday && (
+                {person?.birthday && (
                   <div className="flex items-center gap-2">
                     <FaBirthdayCake className="w-5 h-5" />
                     <span className="text-lg">
@@ -115,7 +108,7 @@ export default function PersonPage() {
                   </div>
                 )}
 
-                {person.place_of_birth && (
+                {person?.place_of_birth && (
                   <div className="flex items-center gap-2">
                     <FaMapMarkerAlt className="w-5 h-5" />
                     <span className="text-lg">{person.place_of_birth}</span>

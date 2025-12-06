@@ -28,12 +28,14 @@ export const searchMovies = async (
       totalPages: response.data.total_pages ?? 1,
     };
   } catch (error) {
-    console.error('Search request failed:', error);
+    if (error instanceof Error) {
+      console.error(error.message);
+    } else {
+      console.error('Search request failed:');
+    }
     return {
       results: [],
       totalPages: 1,
     };
   }
 };
-
-

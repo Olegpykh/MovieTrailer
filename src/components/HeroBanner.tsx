@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { FaChevronLeft, FaChevronRight, FaStar } from 'react-icons/fa';
 import { Movie, TV } from '@/types/tmdb';
 
@@ -32,10 +32,9 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
   const movie: Movie | TV = items[currentSlide];
 
   const title = movie.title || movie.name || 'Unknown';
-  const year =
-    movie.release_date || movie.first_air_date
-      ? new Date(movie.release_date || movie.first_air_date).getFullYear()
-      : 'N/A';
+  const dateStr = movie.release_date ?? movie.first_air_date;
+  const year = dateStr ? new Date(dateStr).getFullYear() : 'N/A';
+
   const rating = movie.vote_average?.toFixed(1) ?? 'N/A';
   const overview = movie.overview || 'No description.';
 

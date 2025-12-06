@@ -1,5 +1,4 @@
 import { Movie, PersonCreditsMovieCard, TV } from '@/types/tmdb';
-import React from 'react';
 import { FaStar, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,8 +53,8 @@ export default function Modal({
           <div className="flex flex-col items-center w-full space-y-6 md:w-2/5">
             <div className="flex justify-center w-full px-4">
               <img
-                src={poster}
-                alt={title}
+                src={poster ?? ""}
+                alt={title ?? undefined}
                 className="object-contain w-full h-auto max-w-md mx-auto bg-black shadow-xl rounded-2xl ring-1 ring-white/10"
               />
             </div>
@@ -74,7 +73,7 @@ export default function Modal({
                       <div className="overflow-hidden rounded-full shadow-lg ring-2 ring-white/20">
                         <img
                           src={`https://image.tmdb.org/t/p/w185${actor.profile_path}`}
-                          alt={actor.name}
+                          alt={actor.name ?? undefined}
                           className="object-cover w-24 h-24 transition-transform duration-300 group-hover:scale-110"
                         />
                       </div>
