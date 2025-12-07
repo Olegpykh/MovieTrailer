@@ -65,7 +65,7 @@ export default function PersonPage() {
               <img
                 src={`https://image.tmdb.org/t/p/w500${person.profile_path}`}
                 alt={person.name}
-                className="w-80 h-[30rem] object-cover rounded-3xl shadow-2xl ring-2 ring-white/20"
+                className="w-80 h-[30rem] mx-auto  object-cover rounded-3xl shadow-3xl ring-2 ring-white/20"
               />
             ) : (
               <div className="bg-gradient-to-br from-gray-800 to-gray-900 w-80 h-[30rem] rounded-3xl flex items-center justify-center text-8xl font-bold text-black shadow-2xl">
