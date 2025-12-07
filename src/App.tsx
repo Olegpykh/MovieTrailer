@@ -8,7 +8,6 @@ import MovieDetails from '@/pages/MovieDetails';
 import SearchPage from '@/pages/SearchPage';
 import { Routes, Route } from 'react-router-dom';
 
-
 function App() {
   return (
     <div className="min-h-screen text-black bg-white dark:bg-black dark:text-white ">

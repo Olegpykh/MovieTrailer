@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline';
 import Switch from 'react-switch';
 import { RootState, AppDispatch } from '@/store/store';
+import ClerkAuth from '@/auth/ClerkAuth';
 
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>();
@@ -92,7 +93,7 @@ export default function NavBar() {
                 type="text"
                 placeholder="Search..."
                 value={searchQuery}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   dispatch(setSearchQuery(e.target.value));
                   navigate('/search');
                 }}
@@ -116,6 +117,7 @@ export default function NavBar() {
                 </button>
               )}
             </div>
+            <ClerkAuth />
           </div>
         </div>
 
