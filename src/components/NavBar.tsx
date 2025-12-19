@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchQuery } from '../store/features/movies/movieSlice';
+import { setSearchQuery } from '../store/features/ui/uiSlice';
 import {
   Bars3Icon,
   XMarkIcon,
@@ -14,7 +14,7 @@ import ClerkAuth from '@/auth/ClerkAuth';
 export default function NavBar() {
   const dispatch = useDispatch<AppDispatch>();
   const searchQuery = useSelector(
-    (state: RootState) => state.movies.searchQuery
+    (state: RootState) => state.ui.searchQuery
   );
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);

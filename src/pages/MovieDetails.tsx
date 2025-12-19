@@ -11,12 +11,11 @@ import {
 } from '../api';
 import {
   setMovieDetails,
-  setTvDetails,
   setVideos,
   setCast,
-  setLoading,
-  setError,
 } from '../store/features/movies/movieSlice';
+import { setTvDetails } from '../store/features/tv/tvSlice';
+import { setLoading, setError } from '../store/features/ui/uiSlice';
 import {
   FaCalendarAlt,
   FaClock,
@@ -34,9 +33,12 @@ export default function MediaDetails() {
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { movieDetails, tvDetails, videos, cast, isLoading } = useSelector(
+  const { movieDetails, videos, cast } = useSelector(
     (state: RootState) => state.movies
   );
+  const { tvDetails } = useSelector((state: RootState) => state.tv);
+  const { isLoading } = useSelector((state: RootState) => state.ui);
+
   const mediaId = Number(id);
 
   const [trailerModal, setTrailerModal] = useState(false);
@@ -128,7 +130,6 @@ export default function MediaDetails() {
     <>
       <div className="min-h-screen text-white bg-neutral-950">
         <div className="relative">
-    
           {backdrop && (
             <div className="absolute inset-0">
               <img
@@ -141,7 +142,6 @@ export default function MediaDetails() {
             </div>
           )}
 
-        
           <div className="relative z-10 px-6 pt-32 pb-20 mx-auto max-w-7xl">
             <Link
               to="/"
@@ -151,7 +151,6 @@ export default function MediaDetails() {
             </Link>
 
             <div className="flex flex-col gap-12 md:flex-row">
-             
               <div className="flex-shrink-0">
                 {poster ? (
                   <img
@@ -167,7 +166,6 @@ export default function MediaDetails() {
                 )}
               </div>
 
-          
               <div className="flex-1 space-y-8">
                 <div>
                   <div className="flex items-center gap-4 mb-2">
@@ -224,7 +222,6 @@ export default function MediaDetails() {
                   ))}
                 </div>
 
-       
                 <div className="text-lg leading-relaxed text-gray-300">
                   <h2 className="mb-4 text-2xl font-bold text-white">
                     Overview
@@ -232,7 +229,6 @@ export default function MediaDetails() {
                   <p>{media.overview || 'No overview available.'}</p>
                 </div>
 
-            
                 {youtubeId ? (
                   <button
                     onClick={() => setTrailerModal(true)}
@@ -293,7 +289,6 @@ export default function MediaDetails() {
           </div>
         </div>
       </div>
-
 
       {trailerModal && youtubeId && (
         <div

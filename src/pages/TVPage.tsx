@@ -13,11 +13,11 @@ import {
   setTvOnTheAir,
   setTvAiringToday,
   setFeaturedTV,
-  setLoading,
-  setError,
-  resetAll,
   setTopRatedTv,
-} from '../store/features/movies/movieSlice';
+  resetTvState
+} from '../store/features/tv/tvSlice';
+import { setLoading, setError } from '../store/features/ui/uiSlice';
+
 import {
   loadMorePopularTVShows,
   loadMoreTvAiringToday,
@@ -29,15 +29,9 @@ import { TV } from 'types/tmdb';
 
 export default function TVPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    popularTVShows,
-    tvOnTheAir,
-    tvAiringToday,
-    topRatedTv,
-    featuredTV,
-    isLoading,
-    error,
-  } = useSelector((state: RootState) => state.movies);
+  const { popularTVShows, tvOnTheAir, tvAiringToday, topRatedTv, featuredTV } =
+    useSelector((state: RootState) => state.tv);
+  const { isLoading, error } = useSelector((state: RootState) => state.ui);
 
   const fetchTV = useCallback(async () => {
     dispatch(setLoading(true));
@@ -67,26 +61,25 @@ export default function TVPage() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    dispatch(resetAll());
+    dispatch(resetTvState());
     fetchTV();
   }, [dispatch, fetchTV]);
 
-
-const handleLoadMorePopular = useCallback(() => {
-  dispatch(loadMorePopularTVShows());
-}, [dispatch]);
-const handleLoadMoreOnAir = useCallback(() => {
-  dispatch(loadMoreTvOnTheAir());
-}, [dispatch]);
-const handleLoadMoreAiringToday = useCallback(() => {
-  dispatch(loadMoreTvAiringToday());
-}, [dispatch]);
-const handleLoadMoreTopRated = useCallback(() => {
-  dispatch(loadMoreTopRatedTV());
-}, [dispatch]);
+  const handleLoadMorePopular = useCallback(() => {
+    dispatch(loadMorePopularTVShows());
+  }, [dispatch]);
+  const handleLoadMoreOnAir = useCallback(() => {
+    dispatch(loadMoreTvOnTheAir());
+  }, [dispatch]);
+  const handleLoadMoreAiringToday = useCallback(() => {
+    dispatch(loadMoreTvAiringToday());
+  }, [dispatch]);
+  const handleLoadMoreTopRated = useCallback(() => {
+    dispatch(loadMoreTopRatedTV());
+  }, [dispatch]);
 
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
@@ -98,10 +91,26 @@ const handleLoadMoreTopRated = useCallback(() => {
         <h1 className="my-10 text-4xl font-semibold text-center">
           Stream the Stories You Love
         </h1>
-        <CategoryRow title="Popular TV Shows" items={popularTVShows} onLoadMore={handleLoadMorePopular} />
-        <CategoryRow title="On The Air" items={tvOnTheAir} onLoadMore={handleLoadMoreOnAir} />
-        <CategoryRow title="Airing Today" items={tvAiringToday} onLoadMore={handleLoadMoreAiringToday}/>
-        <CategoryRow title="Top Rated " items={topRatedTv} onLoadMore={handleLoadMoreTopRated} />
+        <CategoryRow
+          title="Popular TV Shows"
+          items={popularTVShows}
+          onLoadMore={handleLoadMorePopular}
+        />
+        <CategoryRow
+          title="On The Air"
+          items={tvOnTheAir}
+          onLoadMore={handleLoadMoreOnAir}
+        />
+        <CategoryRow
+          title="Airing Today"
+          items={tvAiringToday}
+          onLoadMore={handleLoadMoreAiringToday}
+        />
+        <CategoryRow
+          title="Top Rated "
+          items={topRatedTv}
+          onLoadMore={handleLoadMoreTopRated}
+        />
       </div>
     </>
   );

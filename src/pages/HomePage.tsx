@@ -10,13 +10,11 @@ import {
 import {
   setMovies,
   setUpcomingMovies,
-  setPopularTVShows,
-  setTvOnTheAir,
   setFeaturedMovies,
-  setLoading,
-  setError,
-  resetAll,
+  resetMovieState,
 } from '../store/features/movies/movieSlice';
+import { setPopularTVShows, setTvOnTheAir,resetTvState } from '../store/features/tv/tvSlice';
+import { setLoading, setError } from '../store/features/ui/uiSlice';
 import CategoryRow from '../components/CategoryRow';
 import { RootState, AppDispatch } from '@/store/store';
 
@@ -31,15 +29,13 @@ import {
 
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
-  const {
-    movies,
-    upcomingMovies,
-    popularTVShows,
-    tvOnTheAir,
-    featuredMovies,
-    isLoading,
-    error,
-  } = useSelector((state: RootState) => state.movies);
+  const { movies, upcomingMovies, featuredMovies } = useSelector(
+    (state: RootState) => state.movies
+  );
+  const { popularTVShows, tvOnTheAir } = useSelector(
+    (state: RootState) => state.tv
+  );
+  const { isLoading, error } = useSelector((state: RootState) => state.ui);
 
   const fetchAll = useCallback(async () => {
     dispatch(setLoading(true));
@@ -65,10 +61,11 @@ export default function Home() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    dispatch(resetAll());
+    dispatch(resetMovieState());
+    dispatch(resetTvState());
     fetchAll();
   }, [dispatch, fetchAll]);
 

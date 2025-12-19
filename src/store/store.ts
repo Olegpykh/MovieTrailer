@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import favoritesReducer from './features/favorites/favoritesSlice';
 import moviesReducer from './features/movies/movieSlice';
+import tvReducer from './features/tv/tvSlice';
+import uiReducer from './features/ui/uiSlice';
 
 const store = configureStore({
   reducer: {
     favorites: favoritesReducer,
     movies: moviesReducer,
+    tv: tvReducer,
+    ui: uiReducer,
   },
 });
 export type RootState = ReturnType<typeof store.getState>;
