@@ -15,7 +15,26 @@ export default function CategoryRow({
   onLoadMore,
 }: CategoryRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { clientWidth, scrollLeft, scrollWidth } = container;
+      const isEndOfContainer = clientWidth + scrollLeft >= scrollWidth - 50;
+
+      if (isEndOfContainer) {
+        onLoadMore();
+      }
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [onLoadMore]);
+
   if (!items || items.length === 0) return null;
+
   const scroll = (direction: 'right' | 'left'): void => {
     const container = scrollContainerRef.current;
     if (!container) return;
@@ -32,25 +51,6 @@ export default function CategoryRow({
       behavior: 'smooth',
     });
   };
-
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    const handleScroll = () => {
-      const { clientWidth, scrollLeft, scrollWidth } = container;
-      const isEndOfContainer = clientWidth + scrollLeft >= scrollWidth - 50;
-
-      if (isEndOfContainer) {
-        onLoadMore();
-      }
-    };
-    container.addEventListener('scroll', handleScroll);
-
-    return () => {
-      container.removeEventListener('scroll', handleScroll);
-    };
-  }, [onLoadMore]);
 
   return (
     <section className="mb-12 group/category">

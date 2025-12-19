@@ -14,10 +14,9 @@ import {
   setTopRatedMovies,
   setNowPlayingMovies,
   setFeaturedMovies,
-  setLoading,
-  setError,
-  resetAll,
+  resetMovieState,
 } from '../store/features/movies/movieSlice';
+import { setLoading, setError } from '../store/features/ui/uiSlice';
 import { RootState, AppDispatch } from '@/store/store';
 import {
   loadMoreNowPlaingMovies,
@@ -34,9 +33,8 @@ export default function MoviePage() {
     topRatedMovies,
     nowPlayingMovies,
     featuredMovies,
-    isLoading,
-    error,
   } = useSelector((state: RootState) => state.movies);
+  const { isLoading, error } = useSelector((state: RootState) => state.ui);
 
   const fetchMovies = useCallback(async () => {
     dispatch(setLoading(true));
@@ -64,13 +62,12 @@ export default function MoviePage() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
-    dispatch(resetAll());
+    dispatch(resetMovieState());
     fetchMovies();
   }, [dispatch, fetchMovies]);
-
 
   const handleLoadMorePopular = useCallback(() => {
     dispatch(loadMorePopularMovies());
@@ -87,7 +84,6 @@ export default function MoviePage() {
   const handleLoadMoreNowPlaying = useCallback(() => {
     dispatch(loadMoreNowPlaingMovies());
   }, [dispatch]);
-
 
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;

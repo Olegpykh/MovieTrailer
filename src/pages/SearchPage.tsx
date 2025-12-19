@@ -4,7 +4,7 @@ import {
   setLoading,
   setError,
   setSearchResults,
-} from '../store/features/movies/movieSlice';
+} from '../store/features/ui/uiSlice';
 import { RootState, AppDispatch } from '@/store/store';
 import {
   MovieSearchResult,
@@ -18,11 +18,8 @@ import { Link } from 'react-router-dom';
 
 export default function SearchPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const searchQuery = useSelector(
-    (state: RootState) => state.movies.searchQuery
-  );
-  const results = useSelector((state: RootState) => state.movies.searchResults);
-
+  const searchQuery = useSelector((state: RootState) => state.ui.searchQuery);
+  const results = useSelector((state: RootState) => state.ui.searchResults);
 
   const handleSearch = useCallback(
     async (query: string): Promise<void> => {

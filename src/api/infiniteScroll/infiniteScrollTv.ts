@@ -1,15 +1,15 @@
 import { AppDispatch, RootState } from '@/store/store';
 
 import {
-  apppendPopularTvShows,
-  apppendTopRatedTv,
-  apppendTvAiringToday,
-  apppendTvOnTheAir,
+  appendPopularTvShows,
+  appendTopRatedTv,
+  appendTvAiringToday,
+  appendTvOnTheAir,
   incrementPopularTVShowsPage,
   incrementTopRatedTvPage,
   incrementTvAiringTodayPage,
   incrementTvOnTheAirPage,
-} from '@/store/features/movies/movieSlice';
+} from '@/store/features/tv/tvSlice';
 
 import {
   getPopularTVShows,
@@ -20,36 +20,36 @@ import {
 
 export const loadMorePopularTVShows =
   () => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const page = getState().movies.popularTVShowsPage;
+    const page = getState().tv.popularTVShowsPage;
     const newItems = await getPopularTVShows(page);
 
-    dispatch(apppendPopularTvShows(newItems));
+    dispatch(appendPopularTvShows(newItems));
     dispatch(incrementPopularTVShowsPage());
   };
 
 export const loadMoreTopRatedTV =
   () => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const page = getState().movies.topRatedTvPage;
+    const page = getState().tv.topRatedTvPage;
     const newItems = await getTvTopRated(page);
 
-    dispatch(apppendTopRatedTv(newItems));
+    dispatch(appendTopRatedTv(newItems));
     dispatch(incrementTopRatedTvPage());
   };
 
 export const loadMoreTvAiringToday =
   () => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const page = getState().movies.tvAiringTodayPage;
+    const page = getState().tv.tvAiringTodayPage;
     const newItems = await getTvAiringToday(page);
 
-    dispatch(apppendTvAiringToday(newItems));
+    dispatch(appendTvAiringToday(newItems));
     dispatch(incrementTvAiringTodayPage());
   };
 
 export const loadMoreTvOnTheAir =
   () => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const page = getState().movies.tvOnTheAirPage;
+    const page = getState().tv.tvOnTheAirPage;
     const newItems = await getTvOnTheAir(page);
 
-    dispatch(apppendTvOnTheAir(newItems));
+    dispatch(appendTvOnTheAir(newItems));
     dispatch(incrementTvOnTheAirPage());
   };

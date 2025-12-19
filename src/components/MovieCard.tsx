@@ -10,16 +10,18 @@ import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
 import Modal from './Modal';
 import { RootState, AppDispatch } from '@/store/store';
 import { Movie, TV } from '@/types/tmdb';
-import {PersonCreditsMovieCard,CreditsResponseMovieCard} from "../types/tmdb"
+import {
+  PersonCreditsMovieCard,
+  CreditsResponseMovieCard,
+} from '../types/tmdb';
 
 type MediaCardProps = {
   movie: Movie | TV;
 };
 
-
 export default function MovieCard({ movie }: MediaCardProps) {
+  if (!movie.poster_path) return null;
 
-  
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites);
 
@@ -79,7 +81,9 @@ export default function MovieCard({ movie }: MediaCardProps) {
 
   useEffect(() => {
     const fetchTvCredits = async () => {
-      const data:CreditsResponseMovieCard = await getCreditsFromTV(String(movie.id));
+      const data: CreditsResponseMovieCard = await getCreditsFromTV(
+        String(movie.id)
+      );
       console.log(data.cast);
 
       setCastTV(data.cast);
@@ -89,7 +93,9 @@ export default function MovieCard({ movie }: MediaCardProps) {
 
   useEffect(() => {
     const fetchMovieCredits = async () => {
-      const data:CreditsResponseMovieCard = await getCreditsFromMovie(String(movie.id));
+      const data: CreditsResponseMovieCard = await getCreditsFromMovie(
+        String(movie.id)
+      );
       console.log(data);
 
       setCastMovie(data.cast);
@@ -97,26 +103,19 @@ export default function MovieCard({ movie }: MediaCardProps) {
     fetchMovieCredits();
   }, [movie.id]);
 
-
   const allCredits = [...castMovie, ...castTV];
 
-  
-
-  const title:string = movie.title || movie.name || 'No name';
+  const title: string = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
-  const poster = movie.poster_path
-    ? `https://image.tmdb.org/t/p/w342${movie.poster_path}`
-    : 'https://placehold.co/300x450/1a1a1a/ffffff?text=No+Image&font=roboto';
+  const poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`;
 
   return (
     <>
       <div
         onClick={openModal}
         className="relative w-full max-w-3xl mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:shadow-2xl"
-       
->
-      
+      >
         <div className="relative bg-gray-900">
           <img
             src={poster}
