@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import MovieCard from './MovieCard';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Movie, TV } from 'types/tmdb';
@@ -16,12 +16,17 @@ export default function CategoryRow({
 }: CategoryRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
+  const [isAtStart, setIsAtStart] = useState(true);
+
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const handleScroll = () => {
       const { clientWidth, scrollLeft, scrollWidth } = container;
+
+      setIsAtStart(scrollLeft === 0);
+
       const isEndOfContainer = clientWidth + scrollLeft >= scrollWidth - 50;
 
       if (isEndOfContainer) {
@@ -30,6 +35,7 @@ export default function CategoryRow({
     };
 
     container.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => container.removeEventListener('scroll', handleScroll);
   }, [onLoadMore]);
 
@@ -61,15 +67,36 @@ export default function CategoryRow({
       <div className="relative">
         <button
           onClick={() => scroll('left')}
-          className="absolute left-0 z-20 flex items-center justify-center w-12 h-12 text-black transition-all duration-300 -translate-y-1/2 rounded-full shadow-xl opacity-0 dark:text-white top-1/2 bg-white/70 dark:bg-black/70 backdrop-blur-md group-hover/category:opacity-100 hover:bg-white/90 dark:hover:bg-black/90 md:opacity-100 lg:opacity-0 lg:group-hover/category:opacity-100"
-          aria-label="Scroll left"
+          className={`
+                          hidden md:flex
+                          absolute left-0 top-1/2 -translate-y-1/2 z-20
+                          w-12 h-12 items-center justify-center rounded-full shadow-xl
+                          bg-white/70 dark:bg-black/70 text-black dark:text-white
+                          backdrop-blur-md transition-all duration-300
+
+                          ${
+                            isAtStart
+                              ? 'opacity-0 pointer-events-none'
+                              : 'opacity-0 group-hover/category:opacity-100'
+                          }
+                        `}
+                                aria-label="Scroll left"
         >
           <ChevronLeftIcon className="w-7 h-7" />
         </button>
 
         <button
           onClick={() => scroll('right')}
-          className="absolute right-0 z-20 flex items-center justify-center w-12 h-12 text-black transition-all duration-300 -translate-y-1/2 rounded-full shadow-xl opacity-0 dark:text-white top-1/2 bg-white/70 dark:bg-black/70 backdrop-blur-md group-hover/category:opacity-100 hover:bg-white/90 dark:hover:bg-black/90 md:opacity-100 lg:opacity-0 lg:group-hover/category:opacity-100"
+          className={`
+                        hidden md:flex
+                        absolute right-0 top-1/2 -translate-y-1/2 z-20
+                        w-12 h-12 items-center justify-center rounded-full shadow-xl
+                        bg-white/70 dark:bg-black/70 text-black dark:text-white
+                        backdrop-blur-md transition-all duration-300
+
+                        opacity-0
+                        group-hover/category:opacity-100
+                      `}
           aria-label="Scroll right"
         >
           <ChevronRightIcon className="w-7 h-7" />
