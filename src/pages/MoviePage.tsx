@@ -19,6 +19,12 @@ import {
   resetAll,
 } from '../store/features/movies/movieSlice';
 import { RootState, AppDispatch } from '@/store/store';
+import {
+  loadMoreNowPlaingMovies,
+  loadMorePopularMovies,
+  loadMoreTopRatedMovies,
+  loadMoreUpcomingMovies,
+} from '@/api/infiniteScroll/infiniteScrollMovie';
 
 export default function MoviePage() {
   const dispatch = useDispatch<AppDispatch>();
@@ -55,7 +61,6 @@ export default function MoviePage() {
       } else {
         dispatch(setError('Failed to load movies.'));
       }
-
     } finally {
       dispatch(setLoading(false));
     }
@@ -65,6 +70,24 @@ export default function MoviePage() {
     dispatch(resetAll());
     fetchMovies();
   }, [dispatch, fetchMovies]);
+
+
+  const handleLoadMorePopular = useCallback(() => {
+    dispatch(loadMorePopularMovies());
+  }, [dispatch]);
+
+  const handleLoadMoreUpcoming = useCallback(() => {
+    dispatch(loadMoreUpcomingMovies());
+  }, [dispatch]);
+
+  const handleLoadMoreTopRated = useCallback(() => {
+    dispatch(loadMoreTopRatedMovies());
+  }, [dispatch]);
+
+  const handleLoadMoreNowPlaying = useCallback(() => {
+    dispatch(loadMoreNowPlaingMovies());
+  }, [dispatch]);
+
 
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
@@ -76,10 +99,26 @@ export default function MoviePage() {
         <h1 className="my-10 text-4xl font-semibold text-center">
           Your Gateway to Movies
         </h1>
-        <CategoryRow title="Popular Movies" items={movies} />
-        <CategoryRow title="Upcoming Movies" items={upcomingMovies} />
-        <CategoryRow title="Top Rated Movies" items={topRatedMovies} />
-        <CategoryRow title="Now Playing" items={nowPlayingMovies} />
+        <CategoryRow
+          title="Popular Movies"
+          items={movies}
+          onLoadMore={handleLoadMorePopular}
+        />
+        <CategoryRow
+          title="Upcoming Movies"
+          items={upcomingMovies}
+          onLoadMore={handleLoadMoreUpcoming}
+        />
+        <CategoryRow
+          title="Top Rated Movies"
+          items={topRatedMovies}
+          onLoadMore={handleLoadMoreTopRated}
+        />
+        <CategoryRow
+          title="Now Playing"
+          items={nowPlayingMovies}
+          onLoadMore={handleLoadMoreNowPlaying}
+        />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import MovieCard from './MovieCard';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Movie, TV } from 'types/tmdb';
@@ -6,28 +6,51 @@ import { Movie, TV } from 'types/tmdb';
 type CategoryRowProps = {
   title: string;
   items: (Movie | TV)[];
+  onLoadMore: () => void;
 };
 
-export default function CategoryRow({ title, items = [] }: CategoryRowProps) {
+export default function CategoryRow({
+  title,
+  items = [],
+  onLoadMore,
+}: CategoryRowProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-
   if (!items || items.length === 0) return null;
-
-  const scroll = (direction: "left" | "right") => {
+  const scroll = (direction: 'right' | 'left'): void => {
     const container = scrollContainerRef.current;
     if (!container) return;
 
     const scrollAmount = container.clientWidth * 0.6;
+
     const targetScroll =
-      direction === 'left'
-        ? container.scrollLeft - scrollAmount
-        : container.scrollLeft + scrollAmount;
+      direction === 'right'
+        ? container.scrollLeft + scrollAmount
+        : container.scrollLeft - scrollAmount;
 
     container.scrollTo({
       left: targetScroll,
       behavior: 'smooth',
     });
   };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { clientWidth, scrollLeft, scrollWidth } = container;
+      const isEndOfContainer = clientWidth + scrollLeft >= scrollWidth - 50;
+
+      if (isEndOfContainer) {
+        onLoadMore();
+      }
+    };
+    container.addEventListener('scroll', handleScroll);
+
+    return () => {
+      container.removeEventListener('scroll', handleScroll);
+    };
+  }, [onLoadMore]);
 
   return (
     <section className="mb-12 group/category">
@@ -54,12 +77,12 @@ export default function CategoryRow({ title, items = [] }: CategoryRowProps) {
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth"
+          className="flex gap-4 overflow-auto scrollbar-hide"
         >
           {items.map((item) => (
             <div
               key={item.id}
-              className="flex-shrink-0 w-48 transition-all duration-300 md:w-40 sm:w-36 xs:w-32"
+              className="flex-shrink-0 w-32 transition-all duration-300 sm:w-36 md:w-40 lg:w-48"
             >
               <MovieCard movie={item} />
             </div>

@@ -1,9 +1,11 @@
 import client from '../client';
 import { Movie, ApiResponce } from '@/types/tmdb';
 
-export const getMovieNowPlaying = async (): Promise<Movie[]> => {
+export const getMovieNowPlaying = async (page = 1): Promise<Movie[]> => {
   try {
-    const { data } = await client.get<ApiResponce<Movie>>('/movie/now_playing');
+    const { data } = await client.get<ApiResponce<Movie>>(
+      `/movie/now_playing?page=${page}`
+    );
     return data.results;
   } catch (err) {
     if (err instanceof Error) {

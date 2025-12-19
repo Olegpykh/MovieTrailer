@@ -18,6 +18,12 @@ import {
   resetAll,
   setTopRatedTv,
 } from '../store/features/movies/movieSlice';
+import {
+  loadMorePopularTVShows,
+  loadMoreTvAiringToday,
+  loadMoreTopRatedTV,
+  loadMoreTvOnTheAir,
+} from '@/api/infiniteScroll/infiniteScrollTv';
 import { RootState, AppDispatch } from '@/store/store';
 import { TV } from 'types/tmdb';
 
@@ -68,6 +74,20 @@ export default function TVPage() {
     fetchTV();
   }, [dispatch, fetchTV]);
 
+
+const handleLoadMorePopular = useCallback(() => {
+  dispatch(loadMorePopularTVShows());
+}, [dispatch]);
+const handleLoadMoreOnAir = useCallback(() => {
+  dispatch(loadMoreTvOnTheAir());
+}, [dispatch]);
+const handleLoadMoreAiringToday = useCallback(() => {
+  dispatch(loadMoreTvAiringToday());
+}, [dispatch]);
+const handleLoadMoreTopRated = useCallback(() => {
+  dispatch(loadMoreTopRatedTV());
+}, [dispatch]);
+
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
 
@@ -78,10 +98,10 @@ export default function TVPage() {
         <h1 className="my-10 text-4xl font-semibold text-center">
           Stream the Stories You Love
         </h1>
-        <CategoryRow title="Popular TV Shows" items={popularTVShows} />
-        <CategoryRow title="On The Air" items={tvOnTheAir} />
-        <CategoryRow title="Airing Today" items={tvAiringToday} />
-        <CategoryRow title="Top Rated " items={topRatedTv} />
+        <CategoryRow title="Popular TV Shows" items={popularTVShows} onLoadMore={handleLoadMorePopular} />
+        <CategoryRow title="On The Air" items={tvOnTheAir} onLoadMore={handleLoadMoreOnAir} />
+        <CategoryRow title="Airing Today" items={tvAiringToday} onLoadMore={handleLoadMoreAiringToday}/>
+        <CategoryRow title="Top Rated " items={topRatedTv} onLoadMore={handleLoadMoreTopRated} />
       </div>
     </>
   );

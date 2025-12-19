@@ -20,6 +20,15 @@ import {
 import CategoryRow from '../components/CategoryRow';
 import { RootState, AppDispatch } from '@/store/store';
 
+import {
+  loadMorePopularMovies,
+  loadMoreUpcomingMovies,
+} from '@/api/infiniteScroll/infiniteScrollMovie';
+import {
+  loadMorePopularTVShows,
+  loadMoreTvOnTheAir,
+} from '@/api/infiniteScroll/infiniteScrollTv';
+
 export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const {
@@ -63,6 +72,19 @@ export default function Home() {
     fetchAll();
   }, [dispatch, fetchAll]);
 
+  const handleLoadMorePopularMovies = useCallback(() => {
+    dispatch(loadMorePopularMovies());
+  }, [dispatch]);
+  const handleLoadMoreUpcomingMovies = useCallback(() => {
+    dispatch(loadMoreUpcomingMovies());
+  }, [dispatch]);
+  const handleLoadMorePopularTV = useCallback(() => {
+    dispatch(loadMorePopularTVShows());
+  }, [dispatch]);
+  const handleLoadMoreTvOnAir = useCallback(() => {
+    dispatch(loadMoreTvOnTheAir());
+  }, [dispatch]);
+
   if (error) return <p className="text-center text-red-500">{error}</p>;
   if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
 
@@ -75,10 +97,26 @@ export default function Home() {
           Discover Your Next Favorite
         </h1>
 
-        <CategoryRow title="Popular Movies" items={movies} />
-        <CategoryRow title="Upcoming Movies" items={upcomingMovies} />
-        <CategoryRow title="Popular TV Shows" items={popularTVShows} />
-        <CategoryRow title="On The Air" items={tvOnTheAir} />
+        <CategoryRow
+          title="Popular Movies"
+          items={movies}
+          onLoadMore={handleLoadMorePopularMovies}
+        />
+        <CategoryRow
+          title="Upcoming Movies"
+          items={upcomingMovies}
+          onLoadMore={handleLoadMoreUpcomingMovies}
+        />
+        <CategoryRow
+          title="Popular TV Shows"
+          items={popularTVShows}
+          onLoadMore={handleLoadMorePopularTV}
+        />
+        <CategoryRow
+          title="On The Air"
+          items={tvOnTheAir}
+          onLoadMore={handleLoadMoreTvOnAir}
+        />
       </div>
     </>
   );
