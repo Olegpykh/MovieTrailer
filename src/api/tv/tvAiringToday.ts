@@ -1,9 +1,9 @@
 import client from '../client';
 import { TV, ApiResponce } from 'types/tmdb';
 
-export const getTvAiringToday = async (): Promise<TV[]> => {
+export const getTvAiringToday = async (page=1): Promise<TV[]> => {
   try {
-    const { data } = await client.get<ApiResponce<TV>>('tv/airing_today');
+    const { data } = await client.get<ApiResponce<TV>>(`tv/airing_today?page=${page}`);
     return data.results;
   } catch (error) {
     if (error instanceof Error) {

@@ -114,7 +114,9 @@ export default function MovieCard({ movie }: MediaCardProps) {
       <div
         onClick={openModal}
         className="relative w-full max-w-3xl mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:shadow-2xl"
-      >
+       
+>
+      
         <div className="relative bg-gray-900">
           <img
             src={poster}
