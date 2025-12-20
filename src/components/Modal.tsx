@@ -63,7 +63,7 @@ export default function Modal({
                 <h3 className="mb-4 text-sm font-semibold tracking-wider text-black uppercase dark:text-white">
                   Top Cast
                 </h3>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3">
                   {topCast.map((actor) => (
                     <button
                       key={actor.id}

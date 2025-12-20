@@ -11,7 +11,6 @@ export default function PersonPage() {
   const [loading, setLoading] = useState(true);
   const [bioExpanded, setBioExpanded] = useState(false);
 
-  console.log(id);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,12 +46,7 @@ export default function PersonPage() {
       .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
       .slice(0, 30) ?? [];
 
-    
-
-  console.log(knownFor);
-
   const biography = person?.biography || 'No biography available.';
-  console.log(biography);
 
   const shouldTruncate = biography.split('\n').join(' ').split(' ').length > 80;
 
@@ -153,39 +147,39 @@ export default function PersonPage() {
               Known For
             </h2>
             <div className="grid grid-cols-3 gap-6 sm:grid-cols-4 md:grid-cols-6">
-              {knownFor.map((item) => (
-                <Link
-                  key={item.id}
-                  to={
-                    item.media_type === 'movie'
-                      ? `/movie/${item.id}`
-                      : `/tv/${item.id}`
-                  }
-                  className="block transition-all duration-300 group"
-                >
-                  <div className="overflow-hidden shadow-xl rounded-2xl ring-1 ring-white/10">
-                    <img
-                      src={
-                        item.poster_path
-                          ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
-                          : '/placeholder-poster.jpg'
-                      }
-                      alt={item.title || item.name}
-                      className="w-full aspect-[2/3] object-cover transition-all group-hover:scale-110"
-                    />
-                  </div>
-                  <div className="mt-3 text-center">
-                    <p className="text-sm font-medium text-black line-clamp-2 dark:text-white">
-                      {item.title || item.name}
-                    </p>
-                    <p className="mt-1 text-xs text-black dark:text-white">
-                      {item.release_date?.slice(0, 4) ||
-                        item.first_air_date?.slice(0, 4) ||
-                        '—'}
-                    </p>
-                  </div>
-                </Link>
-              ))}
+              {knownFor.map((item) => {
+                const isMovie = !!item.title && !!item.release_date;
+
+                return (
+                  <Link
+                    key={item.id}
+                    to={isMovie ? `/movie/${item.id}` : `/tv/${item.id}`}
+                    className="block transition-all duration-300 group"
+                  >
+                    <div className="overflow-hidden shadow-xl rounded-2xl ring-1 ring-white/10">
+                      <img
+                        src={
+                          item.poster_path
+                            ? `https://image.tmdb.org/t/p/w300${item.poster_path}`
+                            : '/placeholder-poster.jpg'
+                        }
+                        alt={item.title || item.name}
+                        className="w-full aspect-[2/3] object-cover transition-all group-hover:scale-110"
+                      />
+                    </div>
+                    <div className="mt-3 text-center">
+                      <p className="text-sm font-medium text-black line-clamp-2 dark:text-white">
+                        {item.title || item.name}
+                      </p>
+                      <p className="mt-1 text-xs text-black dark:text-white">
+                        {item.release_date?.slice(0, 4) ||
+                          item.first_air_date?.slice(0, 4) ||
+                          '—'}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}

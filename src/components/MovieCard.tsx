@@ -5,8 +5,14 @@ import {
   addToFavorites,
   deleteFromFavorites,
 } from '../store/features/favorites/favoritesSlice';
-import { getMovieVideos, getTvVideos } from '../api/index';
-import { getCreditsFromMovie, getCreditsFromTV } from '../api/index';
+
+import {
+  getMovieVideos,
+  getTvVideos,
+  getCreditsFromMovie,
+  getCreditsFromTV,
+} from '../api/index';
+
 import Modal from './Modal';
 import { RootState, AppDispatch } from '@/store/store';
 import { Movie, TV } from '@/types/tmdb';
@@ -25,11 +31,10 @@ export default function MovieCard({ movie }: MediaCardProps) {
   const dispatch = useDispatch<AppDispatch>();
   const favorites = useSelector((state: RootState) => state.favorites);
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [trailerKey, setTrailerKey] = useState<string | null>(null);
-  const [trailerName, setTrailerName] = useState<string>('');
-  const [castTV, setCastTV] = useState<PersonCreditsMovieCard[]>([]);
-  const [castMovie, setCastMovie] = useState<PersonCreditsMovieCard[]>([]);
+  const [trailerName, setTrailerName] = useState('');
+  const [credits, setCredits] = useState<PersonCreditsMovieCard[]>([]);
 
   const isFavorite = favorites.some((fav) => fav.id === movie.id);
 
@@ -55,18 +60,17 @@ export default function MovieCard({ movie }: MediaCardProps) {
     setIsModalOpen(true);
 
     try {
-      const [movieVideos, tvVideos] = await Promise.all([
-        getMovieVideos(String(movie.id)),
-        getTvVideos(String(movie.id)),
-      ]);
-      console.log(movieVideos, tvVideos);
+      let videos;
 
-      const allVideos = [
-        ...(movieVideos.results || []),
-        ...(tvVideos.results || []),
-      ];
+      if ('title' in movie) {
+        const res = await getMovieVideos(String(movie.id));
+        videos = res.results || [];
+      } else {
+        const res = await getTvVideos(String(movie.id));
+        videos = res.results || [];
+      }
 
-      const trailer = allVideos.find(
+      const trailer = videos.find(
         (v) => v.site === 'YouTube' && v.type === 'Trailer'
       );
 
@@ -80,32 +84,26 @@ export default function MovieCard({ movie }: MediaCardProps) {
   }, [movie]);
 
   useEffect(() => {
-    const fetchTvCredits = async () => {
-      const data: CreditsResponseMovieCard = await getCreditsFromTV(
-        String(movie.id)
-      );
-      console.log(data.cast);
+    const fetchCredits = async () => {
+      try {
+        let data: CreditsResponseMovieCard;
 
-      setCastTV(data.cast);
+        if ('title' in movie) {
+          data = await getCreditsFromMovie(String(movie.id));
+        } else {
+          data = await getCreditsFromTV(String(movie.id));
+        }
+
+        setCredits(data.cast || []);
+      } catch (err) {
+        console.error('Failed to load credits:', err);
+      }
     };
-    fetchTvCredits();
-  }, [movie.id]);
 
-  useEffect(() => {
-    const fetchMovieCredits = async () => {
-      const data: CreditsResponseMovieCard = await getCreditsFromMovie(
-        String(movie.id)
-      );
-      console.log(data);
+    fetchCredits();
+  }, [movie.id, movie]);
 
-      setCastMovie(data.cast);
-    };
-    fetchMovieCredits();
-  }, [movie.id]);
-
-  const allCredits = [...castMovie, ...castTV];
-
-  const title: string = movie.title || movie.name || 'No name';
+  const title = movie.title || movie.name || 'No name';
   const releaseDate = movie.release_date || movie.first_air_date;
   const year = releaseDate ? new Date(releaseDate).getFullYear() : 'N/A';
   const poster = `https://image.tmdb.org/t/p/w342${movie.poster_path}`;
@@ -120,7 +118,7 @@ export default function MovieCard({ movie }: MediaCardProps) {
           <img
             src={poster}
             alt={title}
-            className="object-contain w-full h-auto transition-transform duration-900 "
+            className="object-contain w-full h-auto transition-transform duration-900"
           />
 
           <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 bg-black/40 group-hover:opacity-100">
@@ -143,12 +141,12 @@ export default function MovieCard({ movie }: MediaCardProps) {
             )}
           </button>
 
-          {movie.vote_average ? (
+          {movie.vote_average && (
             <div className="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white rounded-full bottom-3 left-3 bg-black/70 backdrop-blur-sm">
               <FaStar className="text-yellow-400" />
               <span>{movie.vote_average.toFixed(1)}</span>
             </div>
-          ) : null}
+          )}
         </div>
       </div>
 
@@ -161,7 +159,7 @@ export default function MovieCard({ movie }: MediaCardProps) {
           title={title}
           trailerKey={trailerKey}
           trailerName={trailerName}
-          allCredits={allCredits}
+          allCredits={credits}
         />
       )}
     </>
