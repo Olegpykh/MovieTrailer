@@ -35,3 +35,6 @@ export const getMovieVideos = (id: string) =>
   fetchCreditsAndVideos<VideosResponse>('movie', id, 'videos');
 export const getTvVideos = (id: string) =>
   fetchCreditsAndVideos<VideosResponse>('tv', id, 'videos');
+
+
+

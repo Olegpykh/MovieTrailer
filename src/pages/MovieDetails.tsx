@@ -29,7 +29,7 @@ import {
 import { RootState, AppDispatch } from '@/store/store';
 
 export default function MediaDetails() {
-  const { id } = useParams();
+  const { id, type } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -45,40 +45,42 @@ export default function MediaDetails() {
 
   useEffect(() => {
     const fetchAll = async () => {
-      if (!id) return;
+      if (!id || !type) return;
+
       dispatch(setLoading(true));
+
+      dispatch(setMovieDetails(null));
+      dispatch(setTvDetails(null));
+      dispatch(setVideos([]));
+      dispatch(setCast([]));
+
       try {
-        const [movieData, tvData] = await Promise.all([
-          getMovieDetails(mediaId),
-          getTvDetails(mediaId),
-        ]);
+        if (type === 'movie') {
+          const mediaData = await getMovieDetails(mediaId);
+          const creditsData = await getCreditsFromMovie(id);
+          const videosData = await getMovieVideos(id);
 
-        const mediaData = movieData || tvData;
-        if (!mediaData) throw new Error('Not found');
-
-        dispatch(setMovieDetails(movieData ?? null));
-        dispatch(setTvDetails(tvData ?? null));
-
-        const videoFn = movieData ? getMovieVideos : getTvVideos;
-        const videoData = await videoFn(id);
-        dispatch(setVideos(videoData.results || []));
-
-        const creditsFn = movieData ? getCreditsFromMovie : getCreditsFromTV;
-        const creditsData = await creditsFn(id);
-        dispatch(setCast(creditsData?.cast || []));
-      } catch (err) {
-        if (err instanceof Error) {
-          dispatch(setError(err.message));
+          dispatch(setMovieDetails(mediaData ?? null));
+          dispatch(setCast(creditsData.cast || []));
+          dispatch(setVideos(videosData.results || []));
         } else {
-          dispatch(setError('Failed to load data.'));
+          const mediaData = await getTvDetails(mediaId);
+          const creditsData = await getCreditsFromTV(id);
+          const videosData = await getTvVideos(id);
+
+          dispatch(setTvDetails(mediaData ?? null));
+          dispatch(setCast(creditsData.cast || []));
+          dispatch(setVideos(videosData.results || []));
         }
+      } catch (err) {
+        dispatch(setError('Failed to load data'));
       } finally {
         dispatch(setLoading(false));
       }
     };
 
     fetchAll();
-  }, [id, dispatch]);
+  }, [id, type, dispatch]);
 
   const media = movieDetails || tvDetails;
   const isMovie = !!movieDetails;

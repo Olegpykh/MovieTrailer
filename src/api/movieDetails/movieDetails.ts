@@ -25,3 +25,6 @@ export const getTvDetails = (id: number) =>
 
 export const getMovieDetails = (id: number) =>
   fetchMovieAndTvDetails<MovieDetails>('movie', id);
+
+
+
