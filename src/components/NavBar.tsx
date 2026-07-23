@@ -15,6 +15,7 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/movies', label: 'Movies' },
   { to: '/series', label: 'TV Shows' },
+  { to: '/trending', label: 'Trending' },
   { to: '/favorites', label: 'Watchlist' },
 ];
 
@@ -56,7 +57,6 @@ export default function NavBar() {
     >
       <div className="px-6 mx-auto max-w-7xl sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-20 sm:h-24">
-          {/* Left: brand + nav links */}
           <div className="flex items-center gap-12">
             <Link
               to="/"
@@ -111,7 +111,6 @@ export default function NavBar() {
             </div>
           </div>
 
-          {/* Right: theme switch, search, auth */}
           <div className="flex items-center gap-3 sm:gap-7">
             <div className="items-center hidden sm:flex">
               <Switch
@@ -127,7 +126,6 @@ export default function NavBar() {
               />
             </div>
 
-            {/* Mobile: plain icon link straight to the search page, no inline expand */}
             <Link
               to="/search"
               className="p-2 transition-colors duration-300 sm:hidden text-ink/70 dark:text-ivory/60 hover:text-ink dark:hover:text-ivory"
@@ -136,7 +134,6 @@ export default function NavBar() {
               <MagnifyingGlassIcon className="w-5 h-5 stroke-[1.4]" />
             </Link>
 
-            {/* Desktop: hover-to-expand inline search */}
             <div
               className="relative items-center hidden sm:flex"
               onMouseEnter={() => setIsSearchOpen(true)}
@@ -212,7 +209,6 @@ export default function NavBar() {
               );
             })}
 
-            {/* Theme switch lives here on mobile, not in the cramped top bar */}
             <div className="flex items-center justify-between px-3 py-3 mt-2 border-t border-ink/10 dark:border-ivory/10">
               <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/60 dark:text-ivory/60">
                 Dark Mode
