@@ -39,11 +39,11 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
   const overview = movie.overview || 'No description.';
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden">
+    <div className="relative w-screen h-screen overflow-hidden bg-paper dark:bg-void">
       {items.map((item, index) => (
         <div
           key={item.id}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
+          className={`absolute inset-0 transition-opacity duration-1000 ease-smooth ${
             index === currentSlide ? 'opacity-100' : 'opacity-0'
           }`}
         >
@@ -52,21 +52,25 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
             alt={title}
             className="object-cover object-center w-full h-full"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-paper via-paper/70 to-transparent dark:from-void dark:via-void/60" />
+          <div className="absolute inset-0 bg-gradient-to-t from-paper via-transparent to-paper/10 dark:from-void dark:to-void/20" />
           <div className="absolute inset-0 flex items-center">
-            <div className="max-w-3xl pl-6 pr-8 space-y-5 text-white sm:pl-12 lg:pl-20">
-              <h1 className="text-4xl font-bold leading-tight sm:text-5xl lg:text-7xl">
+            <div className="max-w-2xl pl-6 pr-8 space-y-4 sm:pl-12 lg:pl-20">
+              <span className="inline-block text-xs font-medium tracking-[0.25em] uppercase text-muted">
+                Now Streaming
+              </span>
+              <h1 className="text-4xl font-semibold leading-[1.1] text-ink dark:text-ivory sm:text-5xl lg:text-6xl">
                 {title}
               </h1>
-              <div className="flex items-center gap-4 text-lg">
-                <span className="flex items-center gap-1 text-yellow-400">
-                  <FaStar />
+              <div className="flex items-center gap-3 text-sm text-ink/70 dark:text-ivory/70">
+                <span className="flex items-center gap-1.5 text-champagne-dim dark:text-champagne">
+                  <FaStar className="text-xs" />
                   {rating}
                 </span>
-                <span className="text-gray-300">•</span>
+                <span className="text-muted">·</span>
                 <span>{year}</span>
               </div>
-              <p className="max-w-xl text-lg text-gray-200 line-clamp-4">
+              <p className="max-w-lg text-base leading-relaxed text-ink/60 dark:text-ivory/60 line-clamp-3">
                 {overview}
               </p>
             </div>
@@ -78,29 +82,36 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
         <>
           <button
             onClick={prevSlide}
-            className="absolute z-10 p-3 text-white -translate-y-1/2 rounded-full left-4 top-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/40"
+            aria-label="Previous"
+            className="absolute z-10 p-3 transition-colors -translate-y-1/2 border rounded-full left-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
           >
-            <FaChevronLeft className="text-2xl" />
+            <FaChevronLeft className="text-lg" />
           </button>
           <button
             onClick={nextSlide}
-            className="absolute z-10 p-3 text-white -translate-y-1/2 rounded-full right-4 top-1/2 bg-white/20 backdrop-blur-sm hover:bg-white/40"
+            aria-label="Next"
+            className="absolute z-10 p-3 transition-colors -translate-y-1/2 border rounded-full right-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
           >
-            <FaChevronRight className="text-2xl" />
+            <FaChevronRight className="text-lg" />
           </button>
-          <div className="absolute z-10 flex gap-2 -translate-x-1/2 bottom-8 left-1/2">
+          <div className="absolute z-10 flex gap-2 -translate-x-1/2 bottom-10 left-1/2">
             {items.map((_, i) => (
               <button
                 key={i}
                 onClick={() => goToSlide(i)}
-                className={`h-2 w-2 rounded-full transition-all ${
-                  i === currentSlide ? 'bg-white w-8' : 'bg-white/50'
+                aria-label={`Go to slide ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ease-smooth ${
+                  i === currentSlide
+                    ? 'bg-champagne w-6'
+                    : 'bg-ink/20 dark:bg-ivory/25 w-1.5 hover:bg-ink/35 dark:hover:bg-ivory/40'
                 }`}
               />
             ))}
           </div>
         </>
       )}
+
+      <div className="absolute bottom-0 left-0 z-10 w-full h-px bg-ink/10 dark:bg-ivory/10" />
     </div>
   );
 }

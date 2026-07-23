@@ -85,16 +85,56 @@ export default function MoviePage() {
     dispatch(loadMoreNowPlaingMovies());
   }, [dispatch]);
 
-  if (error) return <p className="text-center text-red-500">{error}</p>;
-  if (isLoading) return <p className="text-center text-gray-500">Loading...</p>;
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-3 px-6 text-center">
+        <span className="text-lg font-medium text-ink dark:text-ivory">
+          Something went wrong.
+        </span>
+        <p className="text-sm text-muted">{error}</p>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
+        <span className="relative flex w-8 h-8">
+          <span className="absolute inset-0 border-2 rounded-full border-champagne/20" />
+          <span className="absolute inset-0 border-2 border-transparent rounded-full border-t-champagne animate-spin" />
+        </span>
+        <span className="text-xs font-medium tracking-[0.25em] uppercase text-muted">
+          Loading
+        </span>
+      </div>
+    );
+  }
 
   return (
     <>
       {featuredMovies.length > 0 && <HeroBanner items={featuredMovies} />}
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <h1 className="my-10 text-4xl font-semibold text-center">
-          Your Gateway to Movies
-        </h1>
+        <div className="relative py-10 my-16">
+          <span
+            aria-hidden
+            className="absolute top-0 left-0 w-5 h-5 border-t border-l border-ink/20 dark:border-ivory/20"
+          />
+          <span
+            aria-hidden
+            className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-champagne-dim/50 dark:border-champagne/50"
+          />
+          <div className="relative flex items-center gap-6 pl-6">
+            <span className="hidden sm:block text-[11px] font-medium tracking-[0.3em] uppercase text-champagne/80 [writing-mode:vertical-rl] rotate-180">
+              Movies
+            </span>
+            <h1 className="text-4xl font-medium leading-[1.05] text-ink/90 dark:text-ivory/90 sm:text-5xl lg:text-6xl -tracking-tight">
+              Your gateway{' '}
+              <span className="italic font-light text-champagne-dim dark:text-champagne">
+                to movies
+              </span>
+            </h1>
+          </div>
+        </div>
         <CategoryRow
           title="Popular Movies"
           items={movies}

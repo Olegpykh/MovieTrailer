@@ -10,3 +10,34 @@ body,
   height: 100%;
   width: 100%;
 }
+
+body {
+  @apply font-sans antialiased bg-paper text-ink dark:bg-void dark:text-ivory;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  @apply bg-champagne/25 text-ink dark:text-ivory;
+}
+
+.reel-scroll::-webkit-scrollbar {
+  height: 3px;
+}
+.reel-scroll::-webkit-scrollbar-thumb {
+  background-color: theme('colors.champagne.DEFAULT');
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 168, 118, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(201, 168, 118, 0);
+  }
+}
+.glow-pulse {
+  animation: glow-pulse 2.6s ease-out infinite;
+}
