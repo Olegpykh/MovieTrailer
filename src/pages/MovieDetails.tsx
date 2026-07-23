@@ -8,11 +8,14 @@ import {
   getTvVideos,
   getCreditsFromMovie,
   getCreditsFromTV,
+  getSimilarMovies,
+  getSimilarTv,
 } from '../api';
 import {
   setMovieDetails,
   setVideos,
   setCast,
+  setSimilar,
 } from '../store/features/movies/movieSlice';
 import { setTvDetails } from '../store/features/tv/tvSlice';
 import { setLoading, setError } from '../store/features/ui/uiSlice';
@@ -27,13 +30,14 @@ import {
   FaTimes,
 } from 'react-icons/fa';
 import { RootState, AppDispatch } from '@/store/store';
+import CategoryRow from '../components/CategoryRow';
 
 export default function MediaDetails() {
   const { id, type } = useParams();
 
   const dispatch = useDispatch<AppDispatch>();
 
-  const { movieDetails, videos, cast } = useSelector(
+  const { movieDetails, videos, cast, similar } = useSelector(
     (state: RootState) => state.movies
   );
   const { tvDetails } = useSelector((state: RootState) => state.tv);
@@ -53,24 +57,29 @@ export default function MediaDetails() {
       dispatch(setTvDetails(null));
       dispatch(setVideos([]));
       dispatch(setCast([]));
+      dispatch(setSimilar([]));
 
       try {
         if (type === 'movie') {
           const mediaData = await getMovieDetails(mediaId);
           const creditsData = await getCreditsFromMovie(id);
           const videosData = await getMovieVideos(id);
+          const similarData = await getSimilarMovies(id);
 
           dispatch(setMovieDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
+          dispatch(setSimilar(similarData || []));
         } else {
           const mediaData = await getTvDetails(mediaId);
           const creditsData = await getCreditsFromTV(id);
           const videosData = await getTvVideos(id);
+          const similarData = await getSimilarTv(id);
 
           dispatch(setTvDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
+          dispatch(setSimilar(similarData || []));
         }
       } catch (err) {
         dispatch(setError('Failed to load data'));
@@ -297,6 +306,16 @@ export default function MediaDetails() {
                       </Link>
                     ))}
                 </div>
+              </div>
+            )}
+
+            {similar.length > 0 && (
+              <div className="mt-20">
+                <CategoryRow
+                  title="More Like This"
+                  items={similar}
+                  onLoadMore={() => {}}
+                />
               </div>
             )}
           </div>
