@@ -83,14 +83,14 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
           <button
             onClick={prevSlide}
             aria-label="Previous"
-            className="absolute z-10 p-3 transition-colors -translate-y-1/2 border rounded-full left-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
+            className="absolute z-10 hidden p-3 transition-colors -translate-y-1/2 border rounded-full sm:flex left-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
           >
             <FaChevronLeft className="text-lg" />
           </button>
           <button
             onClick={nextSlide}
             aria-label="Next"
-            className="absolute z-10 p-3 transition-colors -translate-y-1/2 border rounded-full right-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
+            className="absolute z-10 hidden p-3 transition-colors -translate-y-1/2 border rounded-full sm:flex right-4 top-1/2 text-ink dark:text-ivory bg-paper/60 dark:bg-surface/50 backdrop-blur-sm border-ink/10 dark:border-ivory/10 hover:border-champagne hover:text-champagne-dim dark:hover:text-champagne"
           >
             <FaChevronRight className="text-lg" />
           </button>
@@ -111,6 +111,7 @@ export default function HeroBanner({ items = [] }: HeroBannerProps) {
         </>
       )}
 
+      {/* quiet 1px divider into the page below, instead of a decorative strip */}
       <div className="absolute bottom-0 left-0 z-10 w-full h-px bg-ink/10 dark:bg-ivory/10" />
     </div>
   );
