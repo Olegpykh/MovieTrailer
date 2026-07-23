@@ -56,6 +56,7 @@ export default function NavBar() {
     >
       <div className="px-6 mx-auto max-w-7xl sm:px-8 lg:px-12">
         <div className="flex items-center justify-between h-20 sm:h-24">
+          {/* Left: brand + nav links */}
           <div className="flex items-center gap-12">
             <Link
               to="/"
@@ -110,8 +111,9 @@ export default function NavBar() {
             </div>
           </div>
 
-          <div className="flex items-center gap-5 sm:gap-7">
-            <div className="flex items-center">
+          {/* Right: theme switch, search, auth */}
+          <div className="flex items-center gap-3 sm:gap-7">
+            <div className="items-center hidden sm:flex">
               <Switch
                 onChange={handleTheme}
                 checked={checked}
@@ -125,8 +127,18 @@ export default function NavBar() {
               />
             </div>
 
+            {/* Mobile: plain icon link straight to the search page, no inline expand */}
+            <Link
+              to="/search"
+              className="p-2 transition-colors duration-300 sm:hidden text-ink/70 dark:text-ivory/60 hover:text-ink dark:hover:text-ivory"
+              aria-label="Search"
+            >
+              <MagnifyingGlassIcon className="w-5 h-5 stroke-[1.4]" />
+            </Link>
+
+            {/* Desktop: hover-to-expand inline search */}
             <div
-              className="relative flex items-center"
+              className="relative items-center hidden sm:flex"
               onMouseEnter={() => setIsSearchOpen(true)}
               onMouseLeave={() => {
                 setIsSearchOpen(false);
@@ -147,16 +159,16 @@ export default function NavBar() {
                     navigate('/search');
                   }}
                   className={`absolute right-0 py-2 rounded-full 
-                     bg-paper dark:bg-surface-2 text-ink dark:text-ivory
-                          transition-all duration-500 ease-in-out text-xs
-                          placeholder:text-muted font-light
-                          border border-ink/15 dark:border-ivory/[0.08] shadow-sm
-                          focus:outline-none focus:border-champagne/50 dark:focus:border-champagne/40
-                          ${
-                            isSearchOpen
-                              ? 'w-52 sm:w-64 opacity-100 px-4'
-                              : 'w-0 opacity-0 px-0 pointer-events-none border-transparent shadow-none'
-                          } overflow-hidden`}
+                              bg-paper dark:bg-surface-2 text-ink dark:text-ivory
+                              transition-all duration-500 ease-in-out text-xs
+                              placeholder:text-muted font-light
+                              border border-ink/15 dark:border-ivory/[0.08] shadow-sm
+                              focus:outline-none focus:border-champagne/50 dark:focus:border-champagne/40
+                              ${
+                                isSearchOpen
+                                  ? 'w-52 sm:w-64 opacity-100 px-4'
+                                  : 'w-0 opacity-0 px-0 pointer-events-none border-transparent shadow-none'
+                              } overflow-hidden`}
                 />
 
                 {isSearchOpen && searchQuery && (
@@ -170,14 +182,14 @@ export default function NavBar() {
               </div>
             </div>
 
-            <div className="[&_button]:bg-ink dark:[&_button]:bg-ivory [&_button]:hover:bg-champagne-dim dark:[&_button]:hover:bg-champagne [&_button]:text-paper dark:[&_button]:text-void [&_button]:font-medium [&_button]:px-5 [&_button]:py-2 [&_button]:rounded-full [&_button]:text-[11px] [&_button]:uppercase [&_button]:tracking-[0.15em] [&_button]:transition-all [&_button]:duration-300">
+            <div className="shrink-0 [&_button]:bg-ink dark:[&_button]:bg-ivory [&_button]:hover:bg-champagne-dim dark:[&_button]:hover:bg-champagne [&_button]:text-paper dark:[&_button]:text-void [&_button]:font-medium [&_button]:whitespace-nowrap [&_button]:px-3.5 [&_button]:py-1.5 sm:[&_button]:px-5 sm:[&_button]:py-2 [&_button]:rounded-full [&_button]:text-[10px] sm:[&_button]:text-[11px] [&_button]:uppercase [&_button]:tracking-[0.1em] sm:[&_button]:tracking-[0.15em] [&_button]:transition-all [&_button]:duration-300">
               <ClerkAuth />
             </div>
           </div>
         </div>
 
         {isMenuOpen && (
-          <div className="flex flex-col py-5 mt-2 space-y-3 bg-paper/95 dark:bg-void/95 backdrop-blur-2xl border border-ink/10 dark:border-ivory/[0.08] md:hidden px-6 rounded-2xl mb-4 shadow-xl">
+          <div className="flex flex-col py-5 mt-2 space-y-1 bg-paper/95 dark:bg-void/95 backdrop-blur-2xl border border-ink/10 dark:border-ivory/[0.08] md:hidden px-6 rounded-2xl mb-4 shadow-xl">
             {navLinks.map((link) => {
               const isActive =
                 link.to === '/'
@@ -199,6 +211,24 @@ export default function NavBar() {
                 </Link>
               );
             })}
+
+            {/* Theme switch lives here on mobile, not in the cramped top bar */}
+            <div className="flex items-center justify-between px-3 py-3 mt-2 border-t border-ink/10 dark:border-ivory/10">
+              <span className="text-[11px] font-medium tracking-[0.2em] uppercase text-ink/60 dark:text-ivory/60">
+                Dark Mode
+              </span>
+              <Switch
+                onChange={handleTheme}
+                checked={checked}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                offColor="#E5E2DB"
+                onColor="#2A2A2A"
+                handleDiameter={16}
+                height={20}
+                width={40}
+              />
+            </div>
           </div>
         )}
       </div>
