@@ -7,6 +7,7 @@ import {
   SearchResult,
   VideoItem,
   CastMember,
+  TV,
 } from '@/types/tmdb';
 
 interface MoviesState {
@@ -29,6 +30,7 @@ interface MoviesState {
 
   videos: VideoItem[];
   cast: CastMember[];
+  similar: (Movie | TV)[];
 }
 
 const initialState: MoviesState = {
@@ -51,6 +53,7 @@ const initialState: MoviesState = {
 
   videos: [],
   cast: [],
+  similar: [],
 };
 
 const moviesSlice = createSlice({
@@ -111,6 +114,9 @@ const moviesSlice = createSlice({
     setCast: (state, action: PayloadAction<CreditsResponse['cast']>) => {
       state.cast = action.payload;
     },
+    setSimilar: (state, action: PayloadAction<(Movie | TV)[]>) => {
+      state.similar = action.payload;
+    },
 
     resetMovieState: (state) => {
       state.movies = [];
@@ -119,6 +125,7 @@ const moviesSlice = createSlice({
       state.nowPlayingMovies = [];
       state.featuredMovies = [];
       state.movieDetails = null;
+      state.similar = [];
       state.popularMoviesPage = 1;
       state.upcomingMoviesPage = 1;
       state.topRatedMoviesPage = 1;
@@ -137,6 +144,7 @@ export const {
 
   setVideos,
   setCast,
+  setSimilar,
 
   resetMovieState,
 

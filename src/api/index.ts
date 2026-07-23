@@ -18,6 +18,8 @@ export { getTvOnTheAir } from './tv/tvOnTheAir';
 export { getTvAiringToday } from './tv/tvAiringToday';
 export {getMovieNowPlaying} from "./movie/movieNowPlaying"
 export {getTvTopRated} from "./tv/tvTopRated"
+export { getSimilarMovies } from './movie/movieSimilar';
+export { getSimilarTv } from './tv/tvSimilar';
 
 
 
