@@ -59,10 +59,13 @@ export default function CategoryRow({
   };
 
   return (
-    <section className="mb-12 group/category">
-      <h2 className="mb-4 text-2xl font-bold text-black dark:text-white">
-        {title}
-      </h2>
+    <section className="mb-14 group/category">
+      <div className="flex items-center gap-3 mb-4">
+        <span className="w-6 h-[2px] bg-champagne" />
+        <h2 className="text-xl font-semibold tracking-wide text-ink dark:text-ivory sm:text-2xl">
+          {title}
+        </h2>
+      </div>
 
       <div className="relative">
         <button
@@ -70,9 +73,10 @@ export default function CategoryRow({
           className={`
                           hidden md:flex
                           absolute left-0 top-1/2 -translate-y-1/2 z-20
-                          w-12 h-12 items-center justify-center rounded-full shadow-xl
-                          bg-white/70 dark:bg-black/70 text-black dark:text-white
-                          backdrop-blur-md transition-all duration-300
+                          w-11 h-11 items-center justify-center rounded-full shadow-xl
+                          bg-paper/80 dark:bg-void/80 text-ink dark:text-ivory
+                          ring-1 ring-champagne/40 backdrop-blur-md transition-all duration-300
+                          hover:text-champagne
 
                           ${
                             isAtStart
@@ -80,9 +84,9 @@ export default function CategoryRow({
                               : 'opacity-0 group-hover/category:opacity-100'
                           }
                         `}
-                                aria-label="Scroll left"
+          aria-label="Scroll left"
         >
-          <ChevronLeftIcon className="w-7 h-7" />
+          <ChevronLeftIcon className="w-6 h-6" />
         </button>
 
         <button
@@ -90,21 +94,22 @@ export default function CategoryRow({
           className={`
                         hidden md:flex
                         absolute right-0 top-1/2 -translate-y-1/2 z-20
-                        w-12 h-12 items-center justify-center rounded-full shadow-xl
-                        bg-white/70 dark:bg-black/70 text-black dark:text-white
-                        backdrop-blur-md transition-all duration-300
+                        w-11 h-11 items-center justify-center rounded-full shadow-xl
+                        bg-paper/80 dark:bg-void/80 text-ink dark:text-ivory
+                        ring-1 ring-champagne/40 backdrop-blur-md transition-all duration-300
+                        hover:text-champagne
 
                         opacity-0
                         group-hover/category:opacity-100
                       `}
           aria-label="Scroll right"
         >
-          <ChevronRightIcon className="w-7 h-7" />
+          <ChevronRightIcon className="w-6 h-6" />
         </button>
 
         <div
           ref={scrollContainerRef}
-          className="flex gap-4 overflow-auto scrollbar-hide"
+          className="flex gap-4 overflow-auto reel-scroll scrollbar-hide"
         >
           {items.map((item) => (
             <div

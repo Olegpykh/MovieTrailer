@@ -112,18 +112,19 @@ export default function MovieCard({ movie }: MediaCardProps) {
     <>
       <div
         onClick={openModal}
-        className="relative w-full max-w-3xl mx-auto mb-10 overflow-hidden transition-all duration-300 shadow-lg cursor-pointer group rounded-2xl hover:shadow-2xl"
+        className="relative flex flex-col w-full cursor-pointer select-none group"
       >
-        <div className="relative bg-gray-900">
+        <div className="relative aspect-[2/3] w-full overflow-hidden rounded-2xl bg-surface border border-ink/10 dark:border-ivory/10 shadow-subtle transition-all duration-500 ease-smooth group-hover:scale-[1.02] group-hover:shadow-lifted group-hover:border-ink/20 dark:group-hover:border-ivory/20">
           <img
             src={poster}
             alt={title}
-            className="object-contain w-full h-auto transition-transform duration-900"
+            className="object-cover w-full h-full transition-transform duration-700 ease-smooth group-hover:scale-105"
+            loading="lazy"
           />
 
-          <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 bg-black/40 group-hover:opacity-100">
-            <div className="flex items-center justify-center w-16 h-16 transition-transform duration-300 transform scale-0 rounded-full bg-white/20 backdrop-blur-md group-hover:scale-100">
-              <FaPlay className="ml-1 text-3xl text-white" />
+          <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 opacity-0 group-hover:opacity-100 bg-void/40">
+            <div className="flex items-center justify-center transition-all duration-500 transform scale-75 border rounded-full shadow-2xl text-ivory w-14 h-14 bg-ivory/15 backdrop-blur-md border-ivory/25 group-hover:scale-100 group-hover:bg-ivory/25">
+              <FaPlay className="ml-0.5 text-sm drop-shadow-md" />
             </div>
           </div>
 
@@ -132,21 +133,28 @@ export default function MovieCard({ movie }: MediaCardProps) {
             aria-label={
               isFavorite ? 'Remove from favorites' : 'Add to favorites'
             }
-            className="absolute top-3 right-3 z-10 rounded-full bg-white/90 p-2.5 text-lg shadow-md transition-all hover:scale-110"
+            className="absolute z-10 p-2 transition-all duration-300 rounded-full top-3 right-3 text-ink dark:text-ivory hover:scale-110 active:scale-95"
           >
             {isFavorite ? (
-              <FaHeart className="text-red-600 drop-shadow" />
+              <FaHeart className="text-champagne-dim dark:text-champagne drop-shadow-[0_0_10px_rgba(201,168,118,0.45)] text-base" />
             ) : (
-              <FaRegHeart className="text-gray-600 drop-shadow" />
+              <FaRegHeart className="text-base transition-colors text-ink/70 dark:text-ivory/70 hover:text-ink dark:hover:text-ivory drop-shadow-md" />
             )}
           </button>
 
-          {movie.vote_average && (
-            <div className="absolute z-10 flex items-center gap-1 px-2 py-1 text-xs font-semibold text-white rounded-full bottom-3 left-3 bg-black/70 backdrop-blur-sm">
-              <FaStar className="text-yellow-400" />
+          {movie.vote_average ? (
+            <div className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2 py-1 rounded-md bg-void/40 backdrop-blur-md text-[11px] font-medium text-ivory shadow-subtle">
+              <FaStar className="text-champagne text-[10px]" />
               <span>{movie.vote_average.toFixed(1)}</span>
             </div>
-          )}
+          ) : null}
+        </div>
+
+        <div className="px-1 mt-3">
+          <h3 className="text-sm font-medium truncate text-ink dark:text-ivory/90">
+            {title}
+          </h3>
+          <p className="text-xs font-light text-muted mt-0.5">{year}</p>
         </div>
       </div>
 

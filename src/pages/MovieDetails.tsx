@@ -87,17 +87,26 @@ export default function MediaDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-neutral-950">
-        <div className="w-16 h-16 border-4 rounded-full border-t-yellow-400 border-white/20 animate-spin"></div>
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4 bg-paper dark:bg-void">
+        <span className="relative flex w-8 h-8">
+          <span className="absolute inset-0 border-2 rounded-full border-champagne/20" />
+          <span className="absolute inset-0 border-2 border-transparent rounded-full border-t-champagne animate-spin" />
+        </span>
+        <span className="text-xs font-medium tracking-[0.25em] uppercase text-muted">
+          Loading
+        </span>
       </div>
     );
   }
 
   if (!media) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen text-white bg-neutral-950">
-        <p className="text-2xl">Media not found</p>
-        <Link to="/" className="mt-4 text-yellow-400 hover:underline">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-3 text-center bg-paper dark:bg-void text-ink dark:text-ivory">
+        <p className="text-lg font-medium">Media not found</p>
+        <Link
+          to="/"
+          className="text-sm font-medium text-champagne-dim dark:text-champagne hover:opacity-75"
+        >
           Back to Home
         </Link>
       </div>
@@ -130,7 +139,7 @@ export default function MediaDetails() {
 
   return (
     <>
-      <div className="min-h-screen text-white bg-neutral-950">
+      <div className="min-h-screen bg-paper text-ink dark:bg-void dark:text-ivory">
         <div className="relative">
           {backdrop && (
             <div className="absolute inset-0">
@@ -139,17 +148,16 @@ export default function MediaDetails() {
                 alt=""
                 className="object-cover w-full h-full mx-auto"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/80 to-transparent"></div>
-              <div className="absolute inset-0 bg-neutral-950/70"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-paper via-paper/85 to-paper/40 dark:from-void dark:via-void/85 dark:to-void/40"></div>
             </div>
           )}
 
           <div className="relative z-10 px-6 pt-32 pb-20 mx-auto max-w-7xl">
             <Link
               to="/"
-              className="inline-flex items-center gap-2 mb-8 text-yellow-400 transition hover:text-yellow-300"
+              className="inline-flex items-center gap-2 mb-8 text-sm font-medium transition text-champagne-dim dark:text-champagne hover:opacity-75"
             >
-              <FaArrowLeft /> Back
+              <FaArrowLeft className="text-xs" /> Back
             </Link>
 
             <div className="flex flex-col gap-12 md:flex-row">
@@ -158,11 +166,11 @@ export default function MediaDetails() {
                   <img
                     src={poster}
                     alt={title}
-                    className="mx-auto shadow-2xl w-80 rounded-3xl ring-2 ring-white/20"
+                    className="mx-auto w-72 rounded-2xl ring-1 ring-ink/10 dark:ring-ivory/10 shadow-subtle"
                     loading="lazy"
                   />
                 ) : (
-                  <div className="w-80 h-[30rem] bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl flex items-center justify-center text-9xl font-bold text-gray-700 shadow-2xl">
+                  <div className="w-72 h-[26rem] bg-surface rounded-2xl flex items-center justify-center text-6xl font-medium text-muted ring-1 ring-ink/10 dark:ring-ivory/10">
                     ?
                   </div>
                 )}
@@ -170,27 +178,27 @@ export default function MediaDetails() {
 
               <div className="flex-1 space-y-8">
                 <div>
-                  <div className="flex items-center gap-4 mb-2">
-                    <h1 className="text-5xl font-black leading-none tracking-tight md:text-7xl">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h1 className="text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
                       {title}
                     </h1>
                     {isMovie ? (
-                      <FaFilm className="text-4xl text-yellow-400" />
+                      <FaFilm className="text-xl text-champagne-dim dark:text-champagne" />
                     ) : (
-                      <FaTv className="text-4xl text-yellow-400" />
+                      <FaTv className="text-xl text-champagne-dim dark:text-champagne" />
                     )}
                   </div>
 
                   {media.tagline && (
-                    <p className="mt-4 text-2xl italic font-light text-gray-400">
+                    <p className="mt-3 text-lg italic font-light text-ink/50 dark:text-ivory/50">
                       {media.tagline}
                     </p>
                   )}
 
-                  <div className="flex flex-wrap items-center gap-6 mt-6 text-gray-300">
+                  <div className="flex flex-wrap items-center gap-6 mt-5 text-sm text-ink/60 dark:text-ivory/60">
                     <div className="flex items-center gap-2">
-                      <FaCalendarAlt className="text-yellow-400" />
-                      <span className="text-lg">
+                      <FaCalendarAlt className="text-xs text-champagne-dim dark:text-champagne" />
+                      <span>
                         {releaseDate
                           ? new Date(releaseDate).toLocaleDateString('en-GB', {
                               day: 'numeric',
@@ -201,31 +209,31 @@ export default function MediaDetails() {
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FaClock className="text-yellow-400" />
-                      <span className="text-lg">{runtime}</span>
+                      <FaClock className="text-xs text-champagne-dim dark:text-champagne" />
+                      <span>{runtime}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FaStar className="text-yellow-400" />
-                      <span className="text-lg font-semibold">
+                      <FaStar className="text-xs text-champagne-dim dark:text-champagne" />
+                      <span className="font-medium">
                         {media.vote_average?.toFixed(1) ?? '—'}
                       </span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2">
                   {media.genres?.map((g) => (
                     <span
                       key={g.id}
-                      className="px-4 py-2 text-sm font-medium rounded-full bg-white/10 backdrop-blur-sm"
+                      className="px-3.5 py-1.5 text-xs font-medium rounded-full bg-ink/5 dark:bg-ivory/10 text-ink/70 dark:text-ivory/70"
                     >
                       {g.name}
                     </span>
                   ))}
                 </div>
 
-                <div className="text-lg leading-relaxed text-gray-300">
-                  <h2 className="mb-4 text-2xl font-bold text-white">
+                <div className="text-base leading-relaxed text-ink/70 dark:text-ivory/70">
+                  <h2 className="mb-3 text-[11px] font-medium tracking-[0.2em] uppercase text-muted">
                     Overview
                   </h2>
                   <p>{media.overview || 'No overview available.'}</p>
@@ -234,28 +242,31 @@ export default function MediaDetails() {
                 {youtubeId ? (
                   <button
                     onClick={() => setTrailerModal(true)}
-                    className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-black transition-all bg-yellow-400 rounded-full hover:bg-yellow-300 hover:scale-105"
+                    className="inline-flex items-center gap-2.5 px-6 py-3 text-sm font-medium transition-all rounded-full bg-ink dark:bg-ivory text-paper dark:text-void hover:opacity-90"
                   >
-                    <FaPlay /> Play Trailer
+                    <FaPlay className="text-xs" /> Play Trailer
                   </button>
                 ) : (
                   <button
                     disabled
-                    className="inline-flex items-center gap-3 px-8 py-4 text-lg font-bold text-gray-500 bg-gray-800 rounded-full cursor-not-allowed"
+                    className="inline-flex items-center gap-2.5 px-6 py-3 text-sm font-medium rounded-full bg-ink/5 dark:bg-ivory/10 text-muted cursor-not-allowed"
                   >
-                    <FaPlay /> No Trailer Available
+                    <FaPlay className="text-xs" /> No Trailer Available
                   </button>
                 )}
               </div>
             </div>
 
             {cast.length > 0 && (
-              <div className="mt-16">
-                <h2 className="mb-6 text-3xl font-bold text-center text-white">
-                  Top Cast
-                </h2>
+              <div className="mt-20">
+                <div className="flex items-center gap-3 mb-8">
+                  <span className="w-6 h-[2px] bg-champagne" />
+                  <h2 className="text-xl font-semibold tracking-wide">
+                    Top Cast
+                  </h2>
+                </div>
 
-                <div className="grid justify-center grid-cols-2 gap-6 pb-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                <div className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                   {cast
                     .slice(0, 18)
                     .filter((actor) => actor.profile_path)
@@ -263,24 +274,24 @@ export default function MediaDetails() {
                       <Link
                         key={actor.id}
                         to={`/person/${actor.id}`}
-                        className="block mx-auto text-center w-36 group"
+                        className="block text-center transition-opacity group hover:opacity-80"
                       >
                         {actor.profile_path ? (
                           <img
                             src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`}
                             alt={actor.name}
-                            className="object-cover transition-transform shadow-2xl w-36 h-52 rounded-2xl group-hover:scale-105"
+                            className="object-cover w-full aspect-[2/3] rounded-2xl ring-1 ring-ink/10 dark:ring-ivory/10 shadow-subtle transition-transform duration-500 ease-smooth group-hover:scale-105"
                             loading="lazy"
                           />
                         ) : (
-                          <div className="flex items-center justify-center text-6xl font-bold text-gray-600 bg-gray-800 w-36 h-52 rounded-2xl">
+                          <div className="flex items-center justify-center w-full text-4xl font-medium aspect-[2/3] rounded-2xl bg-surface text-muted ring-1 ring-ink/10 dark:ring-ivory/10">
                             ?
                           </div>
                         )}
-                        <p className="mt-3 text-sm font-semibold text-white line-clamp-2">
+                        <p className="mt-3 text-sm font-medium line-clamp-2 text-ink dark:text-ivory/90">
                           {actor.name}
                         </p>
-                        <p className="text-xs text-gray-400 line-clamp-2">
+                        <p className="text-xs text-muted line-clamp-2">
                           {actor.character}
                         </p>
                       </Link>
@@ -294,7 +305,7 @@ export default function MediaDetails() {
 
       {trailerModal && youtubeId && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-void/70 backdrop-blur-md"
           onClick={() => setTrailerModal(false)}
         >
           <div
@@ -303,7 +314,7 @@ export default function MediaDetails() {
           >
             <button
               onClick={() => setTrailerModal(false)}
-              className="absolute right-0 text-4xl transition -top-12 text-white/70 hover:text-white"
+              className="absolute right-0 text-2xl transition -top-12 text-ivory/70 hover:text-ivory"
             >
               <FaTimes />
             </button>
@@ -313,7 +324,7 @@ export default function MediaDetails() {
                 title="Official Trailer"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-                className="w-full h-full shadow-2xl rounded-2xl"
+                className="w-full h-full rounded-xl shadow-lifted"
               ></iframe>
             </div>
           </div>
