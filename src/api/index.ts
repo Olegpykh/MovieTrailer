@@ -20,6 +20,7 @@ export {getMovieNowPlaying} from "./movie/movieNowPlaying"
 export {getTvTopRated} from "./tv/tvTopRated"
 export { getSimilarMovies } from './movie/movieSimilar';
 export { getSimilarTv } from './tv/tvSimilar';
+export { getTrending } from './trending/trending';
 
 
 
