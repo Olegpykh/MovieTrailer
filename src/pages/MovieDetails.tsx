@@ -10,6 +10,8 @@ import {
   getCreditsFromTV,
   getSimilarMovies,
   getSimilarTv,
+  getMovieWatchProviders,
+  getTvWatchProviders,
 } from '../api';
 import {
   setMovieDetails,
@@ -31,7 +33,9 @@ import {
 } from 'react-icons/fa';
 import { RootState, AppDispatch } from '@/store/store';
 import CategoryRow from '../components/CategoryRow';
+import WatchProviders from '../components/WatchProviders';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
+import { WatchProviderRegion } from '@/types/tmdb';
 
 export default function MediaDetails() {
   const { id, type } = useParams();
@@ -47,6 +51,8 @@ export default function MediaDetails() {
   const mediaId = Number(id);
 
   const [trailerModal, setTrailerModal] = useState(false);
+  const [watchProviders, setWatchProviders] =
+    useState<WatchProviderRegion | null>(null);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -59,6 +65,7 @@ export default function MediaDetails() {
       dispatch(setVideos([]));
       dispatch(setCast([]));
       dispatch(setSimilar([]));
+      setWatchProviders(null);
 
       try {
         if (type === 'movie') {
@@ -66,21 +73,25 @@ export default function MediaDetails() {
           const creditsData = await getCreditsFromMovie(id);
           const videosData = await getMovieVideos(id);
           const similarData = await getSimilarMovies(id);
+          const providersData = await getMovieWatchProviders(id);
 
           dispatch(setMovieDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
           dispatch(setSimilar(similarData || []));
+          setWatchProviders(providersData);
         } else {
           const mediaData = await getTvDetails(mediaId);
           const creditsData = await getCreditsFromTV(id);
           const videosData = await getTvVideos(id);
           const similarData = await getSimilarTv(id);
+          const providersData = await getTvWatchProviders(id);
 
           dispatch(setTvDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
           dispatch(setSimilar(similarData || []));
+          setWatchProviders(providersData);
         }
       } catch (err) {
         dispatch(setError('Failed to load data'));
@@ -245,6 +256,8 @@ export default function MediaDetails() {
                     </Link>
                   ))}
                 </div>
+
+                <WatchProviders providers={watchProviders} />
 
                 <div className="text-base leading-relaxed text-ink/70 dark:text-ivory/70">
                   <h2 className="mb-3 text-[11px] font-medium tracking-[0.2em] uppercase text-muted">
