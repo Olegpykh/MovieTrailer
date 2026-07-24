@@ -24,6 +24,10 @@ export { getTrending } from './trending/trending';
 export { getMovieGenres, getTvGenres } from './genres/genres';
 export { discoverMovies } from './discover/discoverMovie';
 export { discoverTv } from './discover/discoverTv';
+export {
+  getMovieWatchProviders,
+  getTvWatchProviders,
+} from './watchProviders/watchProviders';
 
 
 
