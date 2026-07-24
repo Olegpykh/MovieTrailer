@@ -15,10 +15,12 @@ import {
 import MovieCard from '../components/MovieCard';
 import { searchMovies } from '../api/index';
 import { Link } from 'react-router-dom';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 
 export default function SearchPage() {
   const dispatch = useDispatch<AppDispatch>();
   const searchQuery = useSelector((state: RootState) => state.ui.searchQuery);
+  useDocumentTitle(searchQuery ? `Search: ${searchQuery}` : 'Search');
   const results = useSelector((state: RootState) => state.ui.searchResults);
   const { isLoading, error } = useSelector((state: RootState) => state.ui);
 

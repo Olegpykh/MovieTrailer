@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { getTrending, TimeWindow } from '../api/trending/trending';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 import { MovieSearchResult, TvSearchResult, SearchResult } from '@/types/tmdb';
 import MovieCard from '../components/MovieCard';
 import HeroBanner from '../components/HeroBanner';
@@ -14,6 +15,7 @@ function isTV(item: SearchResult): item is TvSearchResult {
 }
 
 export default function TrendingPage() {
+  useDocumentTitle('Trending');
   const [timeWindow, setTimeWindow] = useState<TimeWindow>('day');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [page, setPage] = useState(1);

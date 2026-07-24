@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
 import CategoryRow from '../components/CategoryRow';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 import {
   getPopularMovies,
   getUpcomingMovies,
@@ -26,6 +27,7 @@ import {
 } from '@/api/infiniteScroll/infiniteScrollMovie';
 
 export default function MoviePage() {
+  useDocumentTitle('Movies');
   const dispatch = useDispatch<AppDispatch>();
   const {
     movies,
