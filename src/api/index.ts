@@ -28,6 +28,7 @@ export {
   getMovieWatchProviders,
   getTvWatchProviders,
 } from './watchProviders/watchProviders';
+export { getTvSeasonDetails } from './tv/tvSeasonDetails';
 
 
 

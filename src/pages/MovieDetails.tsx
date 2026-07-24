@@ -34,6 +34,7 @@ import {
 import { RootState, AppDispatch } from '@/store/store';
 import CategoryRow from '../components/CategoryRow';
 import WatchProviders from '../components/WatchProviders';
+import SeasonsBrowser from '../components/SeasonsBrowser';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { WatchProviderRegion } from '@/types/tmdb';
 
@@ -325,6 +326,13 @@ export default function MediaDetails() {
                     ))}
                 </div>
               </div>
+            )}
+
+            {!isMovie && tvDetails?.seasons && tvDetails.seasons.length > 0 && (
+              <SeasonsBrowser
+                tvId={String(mediaId)}
+                seasons={tvDetails.seasons}
+              />
             )}
 
             {similar.length > 0 && (
