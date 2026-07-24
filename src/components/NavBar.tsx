@@ -179,9 +179,7 @@ export default function NavBar() {
               </div>
             </div>
 
-            <div className="shrink-0 [&_button]:bg-ink dark:[&_button]:bg-ivory [&_button]:hover:bg-champagne-dim dark:[&_button]:hover:bg-champagne [&_button]:text-paper dark:[&_button]:text-void [&_button]:font-medium [&_button]:whitespace-nowrap [&_button]:px-3.5 [&_button]:py-1.5 sm:[&_button]:px-5 sm:[&_button]:py-2 [&_button]:rounded-full [&_button]:text-[10px] sm:[&_button]:text-[11px] [&_button]:uppercase [&_button]:tracking-[0.1em] sm:[&_button]:tracking-[0.15em] [&_button]:transition-all [&_button]:duration-300">
-              <ClerkAuth />
-            </div>
+            <ClerkAuth />
           </div>
         </div>
 
