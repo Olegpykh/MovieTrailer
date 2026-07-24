@@ -14,7 +14,7 @@ export interface Movie {
   title: string;
   vote_average: number;
   genre_ids: number[];
-  name?: string; 
+  name?: string;
   first_air_date?: string | null;
 }
 
@@ -27,13 +27,32 @@ export interface TV {
   name: string;
   vote_average: number;
   genre_ids: number[];
-  title?: string; 
+  title?: string;
   release_date?: string | null;
 }
 
 export interface Genres {
   id: number;
   name: string;
+}
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string | null;
+  display_priority?: number;
+}
+
+export interface WatchProviderRegion {
+  link: string;
+  flatrate?: WatchProvider[];
+  rent?: WatchProvider[];
+  buy?: WatchProvider[];
+}
+
+export interface WatchProvidersResponse {
+  id: number;
+  results: Record<string, WatchProviderRegion>;
 }
 
 export interface MovieDetails {
@@ -52,6 +71,16 @@ export interface MovieDetails {
   episode_run_time?: number[] | null;
 }
 
+export interface Season {
+  id: number;
+  name: string;
+  season_number: number;
+  episode_count: number;
+  poster_path: string | null;
+  air_date: string | null;
+  overview: string | null;
+}
+
 export interface TvDetails {
   backdrop_path: string | null;
   genres: Genres[];
@@ -66,6 +95,25 @@ export interface TvDetails {
   release_date?: string | null;
   runtime?: number | null;
   episode_run_time?: number[] | null;
+  seasons?: Season[];
+}
+
+export interface Episode {
+  id: number;
+  name: string;
+  episode_number: number;
+  overview: string | null;
+  still_path: string | null;
+  air_date: string | null;
+  vote_average: number;
+  runtime?: number | null;
+}
+
+export interface SeasonDetailsResponse {
+  id: number;
+  season_number: number;
+  name: string;
+  episodes: Episode[];
 }
 
 interface BaseSearchResult {
@@ -208,23 +256,4 @@ export interface Credit {
   vote_count?: number;
   release_date?: string;
   first_air_date?: string;
-}
-
-export interface WatchProvider {
-  provider_id: number;
-  provider_name: string;
-  logo_path: string | null;
-  display_priority?: number;
-}
-
-export interface WatchProviderRegion {
-  link: string;
-  flatrate?: WatchProvider[];
-  rent?: WatchProvider[];
-  buy?: WatchProvider[];
-}
-
-export interface WatchProvidersResponse {
-  id: number;
-  results: Record<string, WatchProviderRegion>;
 }
