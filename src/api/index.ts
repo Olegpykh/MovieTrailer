@@ -29,6 +29,7 @@ export {
   getTvWatchProviders,
 } from './watchProviders/watchProviders';
 export { getTvSeasonDetails } from './tv/tvSeasonDetails';
+export { getMovieReviews, getTvReviews } from './reviews/reviews';
 
 
 

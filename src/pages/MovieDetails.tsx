@@ -12,6 +12,8 @@ import {
   getSimilarTv,
   getMovieWatchProviders,
   getTvWatchProviders,
+  getMovieReviews,
+  getTvReviews,
 } from '../api';
 import {
   setMovieDetails,
@@ -35,8 +37,9 @@ import { RootState, AppDispatch } from '@/store/store';
 import CategoryRow from '../components/CategoryRow';
 import WatchProviders from '../components/WatchProviders';
 import SeasonsBrowser from '../components/SeasonsBrowser';
+import Reviews from '../components/Reviews';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
-import { WatchProviderRegion } from '@/types/tmdb';
+import { WatchProviderRegion, Review } from '@/types/tmdb';
 
 export default function MediaDetails() {
   const { id, type } = useParams();
@@ -54,6 +57,7 @@ export default function MediaDetails() {
   const [trailerModal, setTrailerModal] = useState(false);
   const [watchProviders, setWatchProviders] =
     useState<WatchProviderRegion | null>(null);
+  const [reviews, setReviews] = useState<Review[]>([]);
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -67,6 +71,7 @@ export default function MediaDetails() {
       dispatch(setCast([]));
       dispatch(setSimilar([]));
       setWatchProviders(null);
+      setReviews([]);
 
       try {
         if (type === 'movie') {
@@ -75,24 +80,28 @@ export default function MediaDetails() {
           const videosData = await getMovieVideos(id);
           const similarData = await getSimilarMovies(id);
           const providersData = await getMovieWatchProviders(id);
+          const reviewsData = await getMovieReviews(id);
 
           dispatch(setMovieDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
           dispatch(setSimilar(similarData || []));
           setWatchProviders(providersData);
+          setReviews(reviewsData);
         } else {
           const mediaData = await getTvDetails(mediaId);
           const creditsData = await getCreditsFromTV(id);
           const videosData = await getTvVideos(id);
           const similarData = await getSimilarTv(id);
           const providersData = await getTvWatchProviders(id);
+          const reviewsData = await getTvReviews(id);
 
           dispatch(setTvDetails(mediaData ?? null));
           dispatch(setCast(creditsData.cast || []));
           dispatch(setVideos(videosData.results || []));
           dispatch(setSimilar(similarData || []));
           setWatchProviders(providersData);
+          setReviews(reviewsData);
         }
       } catch (err) {
         dispatch(setError('Failed to load data'));
@@ -334,6 +343,8 @@ export default function MediaDetails() {
                 seasons={tvDetails.seasons}
               />
             )}
+
+            <Reviews reviews={reviews} />
 
             {similar.length > 0 && (
               <div className="mt-20">
