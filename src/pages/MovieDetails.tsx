@@ -232,12 +232,15 @@ export default function MediaDetails() {
 
                 <div className="flex flex-wrap gap-2">
                   {media.genres?.map((g) => (
-                    <span
+                    <Link
                       key={g.id}
-                      className="px-3.5 py-1.5 text-xs font-medium rounded-full bg-ink/5 dark:bg-ivory/10 text-ink/70 dark:text-ivory/70"
+                      to={`/discover?type=${isMovie ? 'movie' : 'tv'}&genre=${
+                        g.id
+                      }`}
+                      className="px-3.5 py-1.5 text-xs font-medium rounded-full bg-ink/5 dark:bg-ivory/10 text-ink/70 dark:text-ivory/70 hover:bg-champagne hover:text-void transition-colors duration-300"
                     >
                       {g.name}
-                    </span>
+                    </Link>
                   ))}
                 </div>
 
