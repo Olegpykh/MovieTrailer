@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
 import CategoryRow from '../components/CategoryRow';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 import {
   getPopularTVShows,
   getTvOnTheAir,
@@ -28,6 +29,7 @@ import { RootState, AppDispatch } from '@/store/store';
 import { TV } from 'types/tmdb';
 
 export default function TVPage() {
+  useDocumentTitle('TV Shows');
   const dispatch = useDispatch<AppDispatch>();
   const { popularTVShows, tvOnTheAir, tvAiringToday, topRatedTv, featuredTV } =
     useSelector((state: RootState) => state.tv);

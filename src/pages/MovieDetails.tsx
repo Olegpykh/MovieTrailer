@@ -31,6 +31,7 @@ import {
 } from 'react-icons/fa';
 import { RootState, AppDispatch } from '@/store/store';
 import CategoryRow from '../components/CategoryRow';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 export default function MediaDetails() {
   const { id, type } = useParams();
@@ -93,6 +94,8 @@ export default function MediaDetails() {
 
   const media = movieDetails || tvDetails;
   const isMovie = !!movieDetails;
+  const title = isMovie ? media?.title : media?.name;
+  useDocumentTitle(title);
 
   if (isLoading) {
     return (
@@ -129,7 +132,6 @@ export default function MediaDetails() {
 
   const youtubeId = trailer?.key;
 
-  const title = isMovie ? media?.title : media?.name;
   const releaseDate = isMovie ? media?.release_date : media?.first_air_date;
   const backdrop = media.backdrop_path
     ? `https://image.tmdb.org/t/p/w1280${media.backdrop_path}`

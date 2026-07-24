@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getPerson, getPersonCombinedCredits } from '../api/index';
 import { FaBirthdayCake, FaMapMarkerAlt } from 'react-icons/fa';
 import { Person, PersonCombinedCredits, CreditItem } from '@/types/tmdb';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 
 export default function PersonPage() {
   const { id } = useParams<{ id: string }>();
@@ -10,6 +11,8 @@ export default function PersonPage() {
   const [credits, setCredits] = useState<PersonCombinedCredits | null>(null);
   const [loading, setLoading] = useState(true);
   const [bioExpanded, setBioExpanded] = useState(false);
+
+  useDocumentTitle(person?.name);
 
   useEffect(() => {
     const fetchData = async () => {

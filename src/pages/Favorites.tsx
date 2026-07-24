@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import MovieCard from '../components/MovieCard';
 import HeroBanner from '../components/HeroBanner';
 import { RootState } from '../store/store';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 
 export default function Favorites() {
+  useDocumentTitle('Watchlist');
   const favorites = useSelector((state: RootState) => state.favorites);
 
   const featuredFavorites = favorites

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 import { getMovieGenres, getTvGenres } from '../api/genres/genres';
 import { discoverMovies } from '../api/discover/discoverMovie';
 import { discoverTv } from '../api/discover/discoverTv';
@@ -16,6 +17,7 @@ const SORT_LABELS: Record<SortOption, string> = {
 };
 
 export default function DiscoverPage() {
+  useDocumentTitle('Discover');
   const [searchParams, setSearchParams] = useSearchParams();
 
   const type = (searchParams.get('type') as MediaType) || 'movie';

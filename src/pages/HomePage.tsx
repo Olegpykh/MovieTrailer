@@ -1,6 +1,7 @@
 import { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import HeroBanner from '../components/HeroBanner';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle'; 
 import {
   getPopularMovies,
   getUpcomingMovies,
@@ -32,6 +33,7 @@ import {
 } from '@/api/infiniteScroll/infiniteScrollTv';
 
 export default function Home() {
+  useDocumentTitle();
   const dispatch = useDispatch<AppDispatch>();
   const { movies, upcomingMovies, featuredMovies } = useSelector(
     (state: RootState) => state.movies
