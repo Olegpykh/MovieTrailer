@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import NavBar from '@/components/NavBar';
+import Footer from '@/components/Footer';
 import { Routes, Route } from 'react-router-dom';
 
 const Favorites = lazy(() => import('@/pages/Favorites'));
@@ -26,22 +27,25 @@ function RouteFallback() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-paper text-ink dark:bg-void dark:text-ivory">
+    <div className="flex flex-col min-h-screen bg-paper text-ink dark:bg-void dark:text-ivory">
       <NavBar />
       <Suspense fallback={<RouteFallback />}>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/movies" element={<MoviePage />} />
-          <Route path="/series" element={<TVPage />} />
-          <Route path="/trending" element={<TrendingPage />} />
-          <Route path="/discover" element={<DiscoverPage />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/person/:id" element={<PersonPage />} />
-          <Route path="/:type/:id" element={<MovieDetails />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
+        <div className="flex-1">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/movies" element={<MoviePage />} />
+            <Route path="/series" element={<TVPage />} />
+            <Route path="/trending" element={<TrendingPage />} />
+            <Route path="/discover" element={<DiscoverPage />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/person/:id" element={<PersonPage />} />
+            <Route path="/:type/:id" element={<MovieDetails />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </div>
       </Suspense>
+      <Footer />
     </div>
   );
 }
