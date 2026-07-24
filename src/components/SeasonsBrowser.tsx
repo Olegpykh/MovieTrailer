@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Season, Episode } from '@/types/tmdb';
 import { getTvSeasonDetails } from '../api';
 import { FaStar, FaFilm } from 'react-icons/fa';
@@ -17,14 +17,24 @@ export default function SeasonsBrowser({ tvId, seasons }: SeasonsBrowserProps) {
 
   const [selectedSeason, setSelectedSeason] = useState(defaultSeason);
   const [episodes, setEpisodes] = useState<Episode[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  const [isSwitching, setIsSwitching] = useState(false);
+  const hasFetchedOnce = useRef(false);
 
   const fetchEpisodes = useCallback(
     async (seasonNumber: number) => {
-      setIsLoading(true);
+      if (hasFetchedOnce.current) {
+        setIsSwitching(true);
+      } else {
+        setIsInitialLoading(true);
+      }
+
       const data = await getTvSeasonDetails(tvId, seasonNumber);
       setEpisodes(data?.episodes ?? []);
-      setIsLoading(false);
+
+      setIsInitialLoading(false);
+      setIsSwitching(false);
+      hasFetchedOnce.current = true;
     },
     [tvId]
   );
@@ -68,7 +78,7 @@ export default function SeasonsBrowser({ tvId, seasons }: SeasonsBrowserProps) {
       </div>
 
       {/* Episode list */}
-      {isLoading ? (
+      {isInitialLoading ? (
         <div className="flex justify-center py-12">
           <span className="relative flex w-6 h-6">
             <span className="absolute inset-0 border-2 rounded-full border-champagne/20" />
@@ -80,7 +90,11 @@ export default function SeasonsBrowser({ tvId, seasons }: SeasonsBrowserProps) {
           No episode data available for this season.
         </p>
       ) : (
-        <div className="space-y-3">
+        <div
+          className={`space-y-3 transition-opacity duration-300 ${
+            isSwitching ? 'opacity-40' : 'opacity-100'
+          }`}
+        >
           {episodes.map((episode) => (
             <div
               key={episode.id}
