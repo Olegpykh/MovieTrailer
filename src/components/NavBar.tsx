@@ -15,6 +15,7 @@ const navLinks = [
   { to: '/', label: 'Home' },
   { to: '/movies', label: 'Movies' },
   { to: '/series', label: 'TV Shows' },
+  { to: '/discover', label: 'Discover' },
   { to: '/trending', label: 'Trending' },
   { to: '/favorites', label: 'Watchlist' },
 ];

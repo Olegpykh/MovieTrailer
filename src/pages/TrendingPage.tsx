@@ -68,8 +68,6 @@ export default function TrendingPage() {
     }
   }, [page, totalPages, timeWindow, isLoadingMore]);
 
-  // Vertical infinite scroll — load the next page once the sentinel
-  // at the bottom of the grid enters the viewport.
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return;
@@ -125,7 +123,6 @@ export default function TrendingPage() {
 
       <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <div className="relative py-10 my-16">
-          {/* thin corner brackets — gallery/catalog framing detail */}
           <span
             aria-hidden
             className="absolute top-0 left-0 w-5 h-5 border-t border-l border-ink/20 dark:border-ivory/20"
@@ -147,7 +144,6 @@ export default function TrendingPage() {
               </h1>
             </div>
 
-            {/* Day / Week tabs — switching never blanks the page, content just dims briefly */}
             <div className="inline-flex p-1 rounded-full bg-ink/5 dark:bg-ivory/10 w-fit">
               {(['day', 'week'] as TimeWindow[]).map((window) => (
                 <button
@@ -191,7 +187,6 @@ export default function TrendingPage() {
           </div>
         </div>
 
-        {/* Invisible sentinel that triggers the next page as it scrolls into view */}
         <div ref={sentinelRef} className="h-px" />
 
         {isLoadingMore && (

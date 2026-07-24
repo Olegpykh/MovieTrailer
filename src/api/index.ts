@@ -21,6 +21,9 @@ export {getTvTopRated} from "./tv/tvTopRated"
 export { getSimilarMovies } from './movie/movieSimilar';
 export { getSimilarTv } from './tv/tvSimilar';
 export { getTrending } from './trending/trending';
+export { getMovieGenres, getTvGenres } from './genres/genres';
+export { discoverMovies } from './discover/discoverMovie';
+export { discoverTv } from './discover/discoverTv';
 
 
 
